@@ -2,10 +2,19 @@ package com.example.tt.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.tt.fragments.pagetransformer.ScaleInTransformer;
+import com.example.tt.fragments.pagetransformer.ScalePageTransformer;
+import com.example.tt.fragments.pagetransformer.TranslatePagerTransformer;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 import static android.content.ContentValues.TAG;
 
@@ -19,6 +28,7 @@ public class Fragment1 extends Fragment implements View.OnClickListener {
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private ViewPager.PageTransformer pageTransformer;
 
     public Fragment1() {
     }
@@ -36,12 +46,33 @@ public class Fragment1 extends Fragment implements View.OnClickListener {
         return fragment;
     }
 
+    @Bind(R.id.view_pager)
+    ViewPager mViewPager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_1, container, false);
+        ButterKnife.bind(this, rootView);
+        mViewPager.setAdapter(new ImagePagerAdapter());
+        pageTransformer = new ScalePageTransformer();
+        mViewPager.setPageMargin(20);
+        mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setPageTransformer(true, pageTransformer);
+
+        mViewPager.post(new Runnable() {
+            @Override
+            public void run() {
+                mViewPager.setCurrentItem(50, true);
+            }
+        });
+        mViewPager.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mViewPager.setVisibility(View.VISIBLE);
+            }
+        }, 500);
         return rootView;
     }
 
@@ -50,4 +81,5 @@ public class Fragment1 extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         Log.e(TAG, "onClick: " + v.getId());
     }
+
 }

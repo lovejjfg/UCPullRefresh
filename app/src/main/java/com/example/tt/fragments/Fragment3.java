@@ -11,7 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TableLayout;
+
+import com.example.tt.fragments.pagetransformer.ScalePageTransformer;
+import com.example.tt.fragments.pagetransformer.TranslatePagerTransformer;
 
 import java.util.ArrayList;
 
@@ -30,6 +34,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private ViewPager.PageTransformer pageTransformer;
 
     public Fragment3() {
     }
@@ -58,48 +63,31 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
 
         View rootView = inflater.inflate(R.layout.fragment_3, container, false);
         ButterKnife.bind(this, rootView);
-        mViewPager.setAdapter(new MyAdapter(getChildFragmentManager()));
-        mViewPager.setPageTransformer(true, new ViewPager.PageTransformer() {
-            private static final float MIN_SCALE = 0.75f;
-
+       final  ArrayList<Fragment> fragments = new ArrayList<>();
+        fragments.add(new Fragment7());
+        fragments.add(new Fragment5());
+        fragments.add(new Fragment6());
+//        mViewPager.setPageMarginDrawable(R.mipmap.ic_launcher);
+//        pageTransformer = new TranslatePagerTransformer();
+        mViewPager.setPageTransformer(false, pageTransformer);
+        mViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
+            @Override
+            public Fragment getItem(int position) {
+                return fragments.get(position);
+            }
 
             @Override
-            public void transformPage(View view, float position) {
-                int pageWidth = view.getWidth();
+            public int getCount() {
+                return fragments.size();
+            }
 
-                if (position < -1) { // [-Infinity,-1)
-                    // This page is way off-screen to the left.
-                    view.setAlpha(0);
-
-                } else if (position <= 0) { // [-1,0]
-                    // Use the default slide transition when moving to the left page
-                    view.setAlpha(1);
-                    view.setTranslationX(0);
-                    view.setScaleX(1);
-                    view.setScaleY(1);
-
-                } else if (position <= 1) { // (0,1]
-                    // Fade the page out.
-                    view.setAlpha(1 - position);
-
-                    // Counteract the default slide transition
-                    view.setTranslationX(pageWidth * -position);
-
-                    // Scale the page down (between MIN_SCALE and 1)
-                    float scaleFactor = MIN_SCALE
-                            + (1 - MIN_SCALE) * (1 - Math.abs(position));
-                    view.setScaleX(scaleFactor);
-                    view.setScaleY(scaleFactor);
-
-                } else { // (1,+Infinity]
-                    // This page is way off-screen to the right.
-                    view.setAlpha(0);
-                }
-
-
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return "" + position;
             }
         });
         mTab.setupWithViewPager(mViewPager);
+
         return rootView;
     }
 
@@ -108,32 +96,5 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         Log.e(TAG, "onClick: " + v.getId());
     }
 
-    public static class MyAdapter extends FragmentPagerAdapter {
-
-        private final ArrayList<Fragment> list;
-
-        public MyAdapter(FragmentManager fm) {
-            super(fm);
-            list = new ArrayList<>();
-            list.add(new Fragment5());
-            list.add(new Fragment6());
-            list.add(new Fragment7());
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return list.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return list.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return "" + position;
-        }
-    }
 
 }

@@ -2,17 +2,11 @@ package com.example.tt.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.example.tt.fragments.pagetransformer.ScalePageTransformer;
-
-import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static android.content.ContentValues.TAG;
@@ -21,14 +15,14 @@ import static android.content.ContentValues.TAG;
  * Created by Joe on 2016-06-09
  * Email: lovejjfg@gmail.com
  */
-public class Fragment7 extends Fragment implements View.OnClickListener {
+public class Fragment8 extends Fragment implements View.OnClickListener {
     /**
      * The fragment argument representing the section number for this
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    public Fragment7() {
+    public Fragment8() {
     }
 
 
@@ -36,8 +30,8 @@ public class Fragment7 extends Fragment implements View.OnClickListener {
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static Fragment7 newInstance(int sectionNumber) {
-        Fragment7 fragment = new Fragment7();
+    public static Fragment8 newInstance(int sectionNumber) {
+        Fragment8 fragment = new Fragment8();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- "Mark Favorite", should appear as action button if possible -->
+    <item android:id="@+id/action_search"
+          android:title="@string/action_search"
+          android:icon="@android:drawable/ic_menu_search"
+          app:showAsAction="ifRoom|collapseActionView"
+          app:actionViewClass="android.support.v7.widget.SearchView" />
+    <item android:id="@+id/action_share"
+          android:title="@string/share"
+          android:icon="@android:drawable/ic_menu_share"
+          app:showAsAction="ifRoom"
+          app:actionProviderClass="android.support.v7.widget.ShareActionProvider"/>
+</menu>

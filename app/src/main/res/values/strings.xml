@@ -7,4 +7,8 @@
     <string name="this_5">这是五这是五这是五这是五这是五这是五这是五这是五这是五</string>
     <string name="this_6">这是六这是六这是六这是六这是六这是六这是六这是六这是六</string>
     <string name="this_7">这是七这是七这是七这是七这是七这是七这是七这是七这是七</string>
+    <string name="this_8">这是七这是七这是七这是七这是七这是七这是七这是七这是七</string>
+    <string name="action_search">search</string>
+    <string name="search_hint">输入一些要搜索的东西</string>
+    <string name="share">分享</string>
 </resources>
