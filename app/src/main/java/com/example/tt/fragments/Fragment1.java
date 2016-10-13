@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 
 import com.example.tt.fragments.pagetransformer.ScaleInTransformer;
 import com.example.tt.fragments.pagetransformer.ScalePageTransformer;
@@ -72,7 +73,7 @@ public class Fragment1 extends Fragment implements View.OnClickListener {
             public void run() {
                 mViewPager.setVisibility(View.VISIBLE);
             }
-        }, 500);
+        }, 200);
         return rootView;
     }
 

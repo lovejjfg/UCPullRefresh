@@ -11,4 +11,10 @@
     <string name="action_search">search</string>
     <string name="search_hint">输入一些要搜索的东西</string>
     <string name="share">分享</string>
+    <string-array name="names">
+        <item>"唉哟"</item>
+        <item>"不要"</item>
+        <item>"酱紫"</item>
+        <item>"啦啦"</item>
+    </string-array>
 </resources>

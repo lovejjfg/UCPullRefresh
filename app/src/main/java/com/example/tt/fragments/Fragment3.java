@@ -1,6 +1,9 @@
 package com.example.tt.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,15 +14,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 
 import com.example.tt.fragments.pagetransformer.ScalePageTransformer;
 import com.example.tt.fragments.pagetransformer.TranslatePagerTransformer;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 
 import static android.content.ContentValues.TAG;
@@ -35,6 +42,9 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
     private ViewPager.PageTransformer pageTransformer;
+    private String[] names;
+    private ArrayList<Fragment> fragments;
+    private ViewPagerAdapter mAdapter;
 
     public Fragment3() {
     }
@@ -57,43 +67,85 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
     @Bind(R.id.view_pager)
     ViewPager mViewPager;
 
+
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.fragment_3, container, false);
+        rootView.findViewById(R.id.tv_add).setOnClickListener(this);
+        rootView.findViewById(R.id.tv_delete).setOnClickListener(this);
+        rootView.findViewById(R.id.tv_clear).setOnClickListener(this);
         ButterKnife.bind(this, rootView);
-       final  ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(new Fragment7());
-        fragments.add(new Fragment5());
-        fragments.add(new Fragment6());
+        setUpIndicatorWidth();
+
 //        mViewPager.setPageMarginDrawable(R.mipmap.ic_launcher);
 //        pageTransformer = new TranslatePagerTransformer();
         mViewPager.setPageTransformer(false, pageTransformer);
-        mViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
-            @Override
-            public Fragment getItem(int position) {
-                return fragments.get(position);
-            }
-
-            @Override
-            public int getCount() {
-                return fragments.size();
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return "" + position;
-            }
-        });
+        names = getResources().getStringArray(R.array.names);
+        fragments = initFragment();
+        mAdapter = new ViewPagerAdapter(getChildFragmentManager(), fragments);
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.setOffscreenPageLimit(fragments.size());
         mTab.setupWithViewPager(mViewPager);
-
         return rootView;
+    }
+
+    @NonNull
+    private ArrayList<Fragment> initFragment() {
+        ArrayList<Fragment> fragments = new ArrayList<>(8);
+        fragments.add(new ListFragment(Constants.TYPE_NORMAL));
+        fragments.add(new ListFragment(Constants.TYPE_BIG_IMG));
+        fragments.add(new ListFragment(Constants.TYPE_NORMAL));
+        fragments.add(new ListFragment(Constants.TYPE_BIG_IMG));
+        fragments.add(new ListFragment(Constants.TYPE_NORMAL));
+        fragments.add(new ListFragment(Constants.TYPE_BIG_IMG));
+        fragments.add(new ListFragment(Constants.TYPE_NORMAL));
+        fragments.add(new ListFragment(Constants.TYPE_BIG_IMG));
+        return fragments;
     }
 
     @Override
     public void onClick(View v) {
-        Log.e(TAG, "onClick: " + v.getId());
+        int i = v.getId();
+        if (i == R.id.tv_clear) {
+            fragments.clear();
+        } else if (i == R.id.tv_add) {
+            ListFragment fragment1 = new ListFragment(Constants.TYPE_NORMAL);
+            fragment1.setUpdate(true);
+            fragments.add(0,fragment1);
+        } else if (i == R.id.tv_delete) {
+            ListFragment remove = (ListFragment) fragments.remove(0);
+            remove.setUpdate(true);
+        }
+        mAdapter.setFragments(fragments);
+        mViewPager.setOffscreenPageLimit(fragments.size());
+        mViewPager.setCurrentItem(mViewPager.getCurrentItem() == fragments.size() ? fragments.size() - 1 : mViewPager.getCurrentItem());
+        mTab.setupWithViewPager(mViewPager);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private void setUpIndicatorWidth()  {
+        try {
+            Class<?> tablayout = mTab.getClass();
+            Field tabStrip = tablayout.getDeclaredField("mTabStrip");
+            tabStrip.setAccessible(true);
+            LinearLayout ll_tab= (LinearLayout) tabStrip.get(mTab);
+            for (int i = 0; i < ll_tab.getChildCount(); i++) {
+                View child = ll_tab.getChildAt(i);
+                child.setPadding(0,0,0,0);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,1);
+                params.setMarginStart(40);
+                params.setMarginEnd(40);
+                child.setLayoutParams(params);
+                child.invalidate();
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
     }
 
 
