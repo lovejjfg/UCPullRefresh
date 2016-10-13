@@ -35,7 +35,7 @@ import static android.content.ContentValues.TAG;
  * Created by Joe on 2016-06-09
  * Email: lovejjfg@gmail.com
  */
-public class Fragment3 extends Fragment implements View.OnClickListener {
+public class Fragment3 extends BaseFragment implements View.OnClickListener {
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -78,7 +78,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.tv_delete).setOnClickListener(this);
         rootView.findViewById(R.id.tv_clear).setOnClickListener(this);
         ButterKnife.bind(this, rootView);
-        setUpIndicatorWidth();
 
 //        mViewPager.setPageMarginDrawable(R.mipmap.ic_launcher);
 //        pageTransformer = new TranslatePagerTransformer();
@@ -89,20 +88,24 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         mViewPager.setAdapter(mAdapter);
         mViewPager.setOffscreenPageLimit(fragments.size());
         mTab.setupWithViewPager(mViewPager);
+
+//        setUpIndicatorWidth();
         return rootView;
     }
+
+
 
     @NonNull
     private ArrayList<Fragment> initFragment() {
         ArrayList<Fragment> fragments = new ArrayList<>(8);
-        fragments.add(new ListFragment(Constants.TYPE_NORMAL));
-        fragments.add(new ListFragment(Constants.TYPE_BIG_IMG));
-        fragments.add(new ListFragment(Constants.TYPE_NORMAL));
-        fragments.add(new ListFragment(Constants.TYPE_BIG_IMG));
-        fragments.add(new ListFragment(Constants.TYPE_NORMAL));
-        fragments.add(new ListFragment(Constants.TYPE_BIG_IMG));
-        fragments.add(new ListFragment(Constants.TYPE_NORMAL));
-        fragments.add(new ListFragment(Constants.TYPE_BIG_IMG));
+        fragments.add( ListFragment.newInstance(Constants.TYPE_NORMAL));
+        fragments.add( ListFragment.newInstance(Constants.TYPE_BIG_IMG));
+        fragments.add( ListFragment.newInstance(Constants.TYPE_NORMAL));
+        fragments.add( ListFragment.newInstance(Constants.TYPE_BIG_IMG));
+        fragments.add( ListFragment.newInstance(Constants.TYPE_NORMAL));
+        fragments.add( ListFragment.newInstance(Constants.TYPE_BIG_IMG));
+        fragments.add( ListFragment.newInstance(Constants.TYPE_NORMAL));
+        fragments.add( ListFragment.newInstance(Constants.TYPE_BIG_IMG));
         return fragments;
     }
 
@@ -112,7 +115,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         if (i == R.id.tv_clear) {
             fragments.clear();
         } else if (i == R.id.tv_add) {
-            ListFragment fragment1 = new ListFragment(Constants.TYPE_NORMAL);
+            ListFragment fragment1 =  ListFragment.newInstance(Constants.TYPE_NORMAL);
             fragment1.setUpdate(true);
             fragments.add(0,fragment1);
         } else if (i == R.id.tv_delete) {
@@ -125,28 +128,26 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         mTab.setupWithViewPager(mViewPager);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private void setUpIndicatorWidth()  {
-        try {
-            Class<?> tablayout = mTab.getClass();
-            Field tabStrip = tablayout.getDeclaredField("mTabStrip");
-            tabStrip.setAccessible(true);
-            LinearLayout ll_tab= (LinearLayout) tabStrip.get(mTab);
-            for (int i = 0; i < ll_tab.getChildCount(); i++) {
-                View child = ll_tab.getChildAt(i);
-                child.setPadding(0,0,0,0);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,1);
-                params.setMarginStart(40);
-                params.setMarginEnd(40);
-                child.setLayoutParams(params);
-                child.invalidate();
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-    }
+//    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+//    private void setUpIndicatorWidth()  {
+//        try {
+//            Class<?> tablayout = mTab.getClass();
+//            Field tabStrip = tablayout.getDeclaredField("mTabStrip");
+//            tabStrip.setAccessible(true);
+//            LinearLayout ll_tab= (LinearLayout) tabStrip.get(mTab);
+//            for (int i = 0; i < ll_tab.getChildCount(); i++) {
+//                View child = ll_tab.getChildAt(i);
+//                child.setPadding(0,0,0,0);
+//                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,1);
+//                child.setLayoutParams(params);
+//                child.invalidate();
+//            }
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 }

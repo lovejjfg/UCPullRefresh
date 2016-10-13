@@ -35,7 +35,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         int i = position % 2;
-        return new ListFragment(i == 0 ? Constants.TYPE_NORMAL : Constants.TYPE_BIG_IMG);
+        return  ListFragment.newInstance(i == 0 ? Constants.TYPE_NORMAL : Constants.TYPE_BIG_IMG);
 //        return fragments.get(position);
     }
 

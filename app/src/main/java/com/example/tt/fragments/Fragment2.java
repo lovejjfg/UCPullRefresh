@@ -19,7 +19,7 @@ import static android.content.ContentValues.TAG;
  * Created by Joe on 2016-06-09
  * Email: lovejjfg@gmail.com
  */
-public class Fragment2 extends Fragment implements View.OnClickListener {
+public class Fragment2 extends BaseFragment implements View.OnClickListener {
     /**
      * The fragment argument representing the section number for this
      * fragment.

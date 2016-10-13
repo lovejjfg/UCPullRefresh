@@ -3,7 +3,6 @@ package com.example.tt.fragments;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 
 import com.example.tt.fragments.adapter.ListAdapter;
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
@@ -22,7 +20,7 @@ import java.util.ArrayList;
  * Created by Joe on 2016/10/8.
  * Email lovejjfg@gmail.com
  */
-public class ListFragment extends Fragment implements SwipeRefreshRecycleView.OnRefreshLoadMoreListener {
+public class ListFragment extends BaseFragment implements SwipeRefreshRecycleView.OnRefreshLoadMoreListener {
     private SwipeRefreshRecycleView mRecyclerView;
     private ArrayList<String> list;
     private ListAdapter adapter;
@@ -30,14 +28,20 @@ public class ListFragment extends Fragment implements SwipeRefreshRecycleView.On
     private boolean isRefrsh;
     private boolean isVisible;
     private boolean isUpdate;
+    public static final String CURRENT_TYPE = "CURRENT_TYPE";
 
     public ListFragment() {
 
     }
 
-    public ListFragment(int type) {
-        currentType = type;
+    public static ListFragment newInstance(int type) {
+        ListFragment fragment = new ListFragment();
+        Bundle args = new Bundle();
+        args.putInt(CURRENT_TYPE, type);
+        fragment.setArguments(args);
+        return fragment;
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

@@ -17,7 +17,7 @@ public class ScalePageTransformer implements ViewPager.PageTransformer {
 
     @Override
     public void transformPage(View page, float position) {
-        Log.e(TAG, "transformPage: " + position);
+//        Log.e(TAG, "transformPage: " + position);
         if (position < -1) {
             position = -1;
         } else if (position > 1) {
