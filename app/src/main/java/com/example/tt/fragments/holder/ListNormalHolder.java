@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tt.fragments.R;
+import com.example.tt.fragments.model.ModelBean;
 
 
 /**
@@ -28,8 +29,8 @@ public class ListNormalHolder extends RecyclerView.ViewHolder {
         mImg = (ImageView) itemView.findViewById(R.id.image);
     }
 
-    public void onBind(int position) {
+    public void onBind(ModelBean position) {
         // TODO: 2016/10/10 具体资源加载 是否加载图片等逻辑
-        mTittle.setText(String.format("这是%d", position));
+        mTittle.setText(position.getTittle());
     }
 }

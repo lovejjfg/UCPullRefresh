@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.tt.fragments.model.ModelBean;
 import com.example.tt.fragments.OnItemClickListener;
 import com.example.tt.fragments.R;
 import com.example.tt.fragments.holder.ListBigImgHolder;
@@ -20,7 +21,7 @@ import static com.example.tt.fragments.Constants.TYPE_NORMAL;
  * Email lovejjfg@gmail.com
  */
 
-public class ListAdapter extends RefreshRecycleAdapter<String> {
+public class ListAdapter extends RefreshRecycleAdapter<ModelBean> {
     private int currentType;
 
     public ListAdapter(int currentType) {
@@ -52,12 +53,14 @@ public class ListAdapter extends RefreshRecycleAdapter<String> {
                 }
             }
         });
+        ModelBean modelBean = list.get(position);
+        modelBean.setTittle("这是" + position);
         switch (currentType) {
             case TYPE_NORMAL:
-                ((ListNormalHolder) holder).onBind(position);
+                ((ListNormalHolder) holder).onBind(modelBean);
                 break;
             case TYPE_BIG_IMG:
-                ((ListBigImgHolder) holder).onBind(position);
+                ((ListBigImgHolder) holder).onBind(modelBean);
                 break;
         }
 

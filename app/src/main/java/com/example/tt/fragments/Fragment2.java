@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.tt.fragments.base.BaseFragment;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -42,15 +44,19 @@ public class Fragment2 extends BaseFragment implements View.OnClickListener {
         fragment.setArguments(args);
         return fragment;
     }
+
     @Bind(R.id.tab1)
     TextView tv1;
     @Bind(R.id.tab2)
     TextView tv2;
     @Bind(R.id.tab3)
     TextView tv3;
-    private Fragment4 f4;
-    private Fragment5 f5;
-    private Fragment6 f6;
+    private Fragment f4;
+    private Fragment f5;
+    private Fragment f6;
+    private static final String T4 = "t4";
+    private static final String T5 = "t5";
+    private static final String T6 = "t6";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,17 +65,24 @@ public class Fragment2 extends BaseFragment implements View.OnClickListener {
         View rootView = inflater.inflate(R.layout.fragment_2, container, false);
         ButterKnife.bind(this, rootView);
         manager = getChildFragmentManager();
-        f4 = new Fragment4();
-        f5 = new Fragment5();
-        f6 = new Fragment6();
+        if (savedInstanceState == null) {
+            f4 = new Fragment4();
+            f5 = new Fragment5();
+            f6 = new Fragment6();
 
-        manager.beginTransaction()
-                .add(R.id.child_container, f4)
-                .add(R.id.child_container, f5)
-                .hide(f5)
-                .add(R.id.child_container, f6)
-                .hide(f6)
-                .commit();
+            manager.beginTransaction()
+                    .add(R.id.child_container, f4, T4)
+                    .add(R.id.child_container, f5, T5)
+                    .hide(f5)
+                    .add(R.id.child_container, f6, T6)
+                    .hide(f6)
+                    .commit();
+        } else {
+            f4 = manager.findFragmentByTag(T4);
+            f5 = manager.findFragmentByTag(T5);
+            f6 = manager.findFragmentByTag(T6);
+        }
+
 
         tv1.setOnClickListener(this);
         tv2.setOnClickListener(this);

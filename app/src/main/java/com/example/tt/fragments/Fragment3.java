@@ -6,30 +6,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
 
-import com.example.tt.fragments.pagetransformer.ScalePageTransformer;
-import com.example.tt.fragments.pagetransformer.TranslatePagerTransformer;
+import com.example.tt.fragments.base.BaseFragment;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import butterknife.Bind;
-import butterknife.BindString;
 import butterknife.ButterKnife;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Joe on 2016-06-09

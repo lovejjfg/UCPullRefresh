@@ -1,18 +1,13 @@
 package com.example.tt.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.example.tt.fragments.pagetransformer.ScalePageTransformer;
+import com.example.tt.fragments.base.BaseFragment;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static android.content.ContentValues.TAG;

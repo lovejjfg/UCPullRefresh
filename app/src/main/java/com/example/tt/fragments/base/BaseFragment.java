@@ -1,4 +1,4 @@
-package com.example.tt.fragments;
+package com.example.tt.fragments.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
