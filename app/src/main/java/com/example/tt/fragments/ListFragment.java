@@ -170,7 +170,9 @@ public class ListFragment extends BaseFragment implements SwipeRefreshRecycleVie
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("beans", (ArrayList<? extends Parcelable>) adapter.getList());
+        ArrayList<ModelBean> list = new ArrayList<>();
+        list.addAll(adapter.getList());
+        outState.putParcelableArrayList("beans", list);
         super.onSaveInstanceState(outState);
     }
 
