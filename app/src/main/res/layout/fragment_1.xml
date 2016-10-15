@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     android:id="@+id/activity_main2"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false"
@@ -10,12 +9,13 @@
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_centerInParent="true"
-        android:visibility="invisible"
-        android:clipChildren="false"
-        android:overScrollMode="never">
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:clipToPadding="false"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingLeft="150dp"
+        android:paddingRight="150dp">
     </android.support.v4.view.ViewPager>
 
-</RelativeLayout>
+</FrameLayout>

@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tt.fragments.base.BaseFragment;
+import com.example.tt.fragments.pagetransformer.AccordionTransformer;
+import com.example.tt.fragments.pagetransformer.ScaleInTransformer;
 import com.example.tt.fragments.pagetransformer.ScalePageTransformer;
 
 import butterknife.Bind;
@@ -53,27 +55,27 @@ public class Fragment1 extends BaseFragment implements View.OnClickListener {
         View rootView = inflater.inflate(R.layout.fragment_1, container, false);
         ButterKnife.bind(this, rootView);
         mViewPager.setAdapter(new ImagePagerAdapter());
-        pageTransformer = new ScalePageTransformer();
-        mViewPager.setPageMargin(20);
+        pageTransformer = new ScaleInTransformer();
+        mViewPager.setPageMargin(5);
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setPageTransformer(true, pageTransformer);
 
         if (savedInstanceState == null) {
 
-            mViewPager.post(new Runnable() {
-                @Override
-                public void run() {
-                    mViewPager.setCurrentItem(50, true);
-                }
-            });
-            mViewPager.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mViewPager.setVisibility(View.VISIBLE);
-                }
-            }, 200);
+//            mViewPager.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mViewPager.setCurrentItem(50, true);
+//                }
+//            });
+//            mViewPager.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mViewPager.setVisibility(View.VISIBLE);
+//                }
+//            }, 200);
         } else {
-            mViewPager.setVisibility(View.VISIBLE);
+//            mViewPager.setVisibility(View.VISIBLE);
         }
 
         return rootView;

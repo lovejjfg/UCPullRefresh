@@ -1,8 +1,11 @@
 package com.example.tt.fragments;
 
 import android.support.v4.view.PagerAdapter;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 /**
@@ -25,15 +28,9 @@ public class ImagePagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         ImageView view = new ImageView(container.getContext());
-//                ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//                view.setLayoutParams(lp);
-//                view.setText(position + ":" + view);
-        view.setScaleType(ImageView.ScaleType.FIT_XY);
-//                view.setBackgroundColor(Color.parseColor("#44ff0000"));
 
         view.setImageResource(imgRes[position % imgRes.length]);
         container.addView(view);
-//                view.setAdjustViewBounds(true);
         return view;
     }
 

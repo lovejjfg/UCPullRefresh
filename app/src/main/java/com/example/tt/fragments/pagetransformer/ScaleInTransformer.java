@@ -7,7 +7,7 @@ import android.view.View;
 
 public class ScaleInTransformer extends BasePageTransformer
 {
-    private static final float DEFAULT_MIN_SCALE = 0.85f;
+    private static final float DEFAULT_MIN_SCALE = 0.6f;
     private float mMinScale = DEFAULT_MIN_SCALE;
 
     public ScaleInTransformer()
