@@ -181,4 +181,5 @@ public class ListFragment extends BaseFragment implements SwipeRefreshRecycleVie
         Log.e(TAG, "onDestroy:fragment销毁了！");
         super.onDestroy();
     }
+
 }

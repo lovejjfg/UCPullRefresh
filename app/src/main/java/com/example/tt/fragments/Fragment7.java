@@ -5,10 +5,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ViewFlipper;
 
 import com.example.tt.fragments.base.BaseFragment;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static android.content.ContentValues.TAG;
 
@@ -39,6 +42,8 @@ public class Fragment7 extends BaseFragment implements View.OnClickListener {
         return fragment;
     }
 
+    @Bind(R.id.flipper)
+    ViewFlipper flipper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,6 +52,11 @@ public class Fragment7 extends BaseFragment implements View.OnClickListener {
         View rootView = inflater.inflate(R.layout.fragment_7, container, false);
         ButterKnife.bind(this, rootView);
         return rootView;
+    }
+
+    @OnClick({R.id.bt_1, R.id.bt_2, R.id.bt_3, R.id.bt_4})
+    void click() {
+        flipper.showNext();
     }
 
     @Override

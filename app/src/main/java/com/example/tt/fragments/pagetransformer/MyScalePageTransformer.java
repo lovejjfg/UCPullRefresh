@@ -10,18 +10,15 @@ import static android.content.ContentValues.TAG;
 /**
  * Created by HanHailong on 15/9/27.
  */
-public class ScalePageTransformer implements ViewPager.PageTransformer {
+public class MyScalePageTransformer implements ViewPager.PageTransformer {
 
     public static final float MAX_SCALE = 1.2f;
     public static final float MIN_SCALE = 0.6f;
-    private  ViewPager mViewPager;
-
-    public ScalePageTransformer(ViewPager mViewPager) {
-        this.mViewPager = mViewPager;
-    }
 
     @Override
     public void transformPage(View page, float position) {
+        int p = (Integer)page.getTag();
+
         Log.e(TAG, "transformPage: " + position);
         if (position < -1) {
             position = -1;
@@ -31,7 +28,7 @@ public class ScalePageTransformer implements ViewPager.PageTransformer {
 
         float tempScale = position < 0 ? 1 + position : 1 - position;
 
-        float slope = (MAX_SCALE - MIN_SCALE) / 1;//0.6
+        float slope = (MAX_SCALE - MIN_SCALE) / 1;
         //一个公式
         float scaleValue = MIN_SCALE + tempScale * slope;
         page.setScaleX(scaleValue);

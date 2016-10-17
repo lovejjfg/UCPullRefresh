@@ -10,13 +10,17 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.tt.fragments.base.BaseFragment;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static android.R.attr.id;
 
 /**
  * Created by Joe on 2016-06-09

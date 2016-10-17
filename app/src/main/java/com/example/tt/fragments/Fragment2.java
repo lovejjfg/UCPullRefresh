@@ -68,7 +68,7 @@ public class Fragment2 extends BaseFragment implements View.OnClickListener {
         if (savedInstanceState == null) {
             f4 = new Fragment4();
             f5 = new Fragment5();
-            f6 = new Fragment6();
+            f6 = new Fragment7();
 
             manager.beginTransaction()
                     .add(R.id.child_container, f4, T4)

@@ -1,5 +1,6 @@
 package com.example.tt.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -8,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tt.fragments.base.BaseFragment;
-import com.example.tt.fragments.pagetransformer.AccordionTransformer;
-import com.example.tt.fragments.pagetransformer.ScaleInTransformer;
+import com.example.tt.fragments.model.ModelBean;
 import com.example.tt.fragments.pagetransformer.ScalePageTransformer;
+import com.google.gson.Gson;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -49,14 +50,22 @@ public class Fragment1 extends BaseFragment implements View.OnClickListener {
     ViewPager mViewPager;
 
     @Override
+    public void onAttach(Context context) {
+        Gson gson = new Gson();
+        ModelBean modelBean = gson.fromJson(getString(R.string.gson), ModelBean.class);
+        Log.e(TAG, "Fragment1: " + modelBean.toString());
+        super.onAttach(context);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_1, container, false);
         ButterKnife.bind(this, rootView);
         mViewPager.setAdapter(new ImagePagerAdapter());
-        pageTransformer = new ScaleInTransformer();
-        mViewPager.setPageMargin(5);
+        pageTransformer = new ScalePageTransformer(mViewPager);
+        mViewPager.setPageMargin(20);
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setPageTransformer(true, pageTransformer);
 
@@ -75,7 +84,7 @@ public class Fragment1 extends BaseFragment implements View.OnClickListener {
 //                }
 //            }, 200);
         } else {
-//            mViewPager.setVisibility(View.VISIBLE);
+            mViewPager.setVisibility(View.VISIBLE);
         }
 
         return rootView;

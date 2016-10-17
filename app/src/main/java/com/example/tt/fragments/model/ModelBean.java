@@ -3,15 +3,21 @@ package com.example.tt.fragments.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Joe on 2016/10/14.
  * Email lovejjfg@gmail.com
  */
 
 public class ModelBean implements Parcelable {
+    @SerializedName("sTittle")
     private String tittle;
+    @SerializedName("sContent")
     private String content;
+    @SerializedName("sImgUrl")
     private String imgUrl;
+
     private String jumpUrl;
 
     public String getContent() {
@@ -83,5 +89,15 @@ public class ModelBean implements Parcelable {
 
     public ModelBean(String tittle) {
         this.tittle = tittle;
+    }
+
+    @Override
+    public String toString() {
+        return "ModelBean{" +
+                "content='" + content + '\'' +
+                ", tittle='" + tittle + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", jumpUrl='" + jumpUrl + '\'' +
+                '}';
     }
 }

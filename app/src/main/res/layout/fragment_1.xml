@@ -10,12 +10,12 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="500dp"
         android:clipToPadding="false"
         android:layout_gravity="center"
         android:gravity="center"
-        android:paddingLeft="150dp"
-        android:paddingRight="150dp">
+        android:paddingLeft="80dp"
+        android:paddingRight="80dp">
     </android.support.v4.view.ViewPager>
 
 </FrameLayout>

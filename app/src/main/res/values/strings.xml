@@ -29,4 +29,9 @@
     <string name="action_example">Example action</string>
 
     <string name="action_settings">Settings</string>
+    <string name="gson">{
+	"sTittle":"这是标题",
+	"sContent":"这是内容",
+	"sImgUrl":"这是URL"
+}</string>
 </resources>
