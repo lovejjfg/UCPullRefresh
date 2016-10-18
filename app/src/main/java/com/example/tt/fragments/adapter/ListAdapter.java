@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.tt.fragments.holder.NestedHolder;
 import com.example.tt.fragments.model.ModelBean;
 import com.example.tt.fragments.OnItemClickListener;
 import com.example.tt.fragments.R;
@@ -33,8 +34,8 @@ public class ListAdapter extends RefreshRecycleAdapter<ModelBean> {
         View inflate;
         switch (currentType) {
             case TYPE_NORMAL:
-                inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_normal, parent, false);
-                return new ListNormalHolder(inflate);
+                inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_nested, parent, false);
+                return new NestedHolder(inflate);
             case TYPE_BIG_IMG:
                 inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_big_image, parent, false);
                 return new ListBigImgHolder(inflate);
@@ -57,11 +58,12 @@ public class ListAdapter extends RefreshRecycleAdapter<ModelBean> {
         modelBean.setTittle("这是" + position);
         switch (currentType) {
             case TYPE_NORMAL:
-                ((ListNormalHolder) holder).onBind(modelBean);
+                ((NestedHolder) holder).onBind(modelBean);
                 break;
             case TYPE_BIG_IMG:
                 ((ListBigImgHolder) holder).onBind(modelBean);
                 break;
+
         }
 
     }
