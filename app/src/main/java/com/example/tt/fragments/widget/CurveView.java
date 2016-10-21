@@ -5,11 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 
 import com.example.tt.fragments.R;
+import com.example.tt.fragments.utils.ViewOffsetHelper;
 
 import butterknife.BindColor;
 import butterknife.BindDimen;
@@ -30,6 +32,8 @@ public class CurveView extends View implements CurveLayout.Dispatcher {
     int UC_COLOR;
     @BindDimen(R.dimen.max_drag)
     int MAX_DRAG;
+    private ViewOffsetHelper sheetOffsetHelper;
+    private int targetHeight;
 
 
     public CurveView(Context context) {
@@ -90,26 +94,37 @@ public class CurveView extends View implements CurveLayout.Dispatcher {
 
     public void setTarget(View mView) {
         targetView = mView;
+        targetHeight = targetView.getHeight();
+        Log.e(TAG, "setTarget: " + targetHeight);
+        sheetOffsetHelper = new ViewOffsetHelper(targetView);
     }
 
     @Override
     public void onDispatch(float dx, float dy) {
         currentY = dy > MAX_DRAG ? MAX_DRAG : dy;
+        float ddy = dy - currentY;
         currentX = dx;
+        Log.e(TAG, "onDispatch: " + ddy);
         targetView.setTranslationY(currentY * 0.5f);
-        invalidate();
+        if (dy > 0) {
+            invalidate();
+        } else {
+//            sheetOffsetHelper.offsetTopAndBottom((int) ddy);
+        }
+
     }
 
     @Override
     public void onDispatchUp() {
         currentY = 0;
+        sheetOffsetHelper.resyncOffsets();
         ViewGroup.LayoutParams layoutParams = targetView.getLayoutParams();
         layoutParams.height -= currentY;
         targetView.setLayoutParams(layoutParams);
         targetView.requestLayout();
 
-//        targetView.setTranslationY(currentY);
+        targetView.setTranslationY(currentY);
 
-//        invalidate();
+        invalidate();
     }
 }

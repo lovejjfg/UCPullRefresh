@@ -60,6 +60,10 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
     @Bind(R.id.view_pager)
     ViewPager mViewPager;
 
+    @Bind(R.id.ts)
+    CurveView mCurveView;
+    @Bind(R.id.curve_container)
+    CurveLayout mContainer;
 
 
 
@@ -78,6 +82,8 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
         mViewPager.setPageTransformer(false, pageTransformer);
         names = getResources().getStringArray(R.array.names);
         fragments = initFragment();
+        mCurveView.setTarget(mViewPager);
+        mContainer.addmDispatcher(mCurveView);
         mAdapter = new ViewPagerAdapter(getChildFragmentManager(), fragments);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setOffscreenPageLimit(fragments.size());
