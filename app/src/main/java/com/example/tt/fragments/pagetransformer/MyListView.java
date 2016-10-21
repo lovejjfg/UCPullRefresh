@@ -28,17 +28,17 @@ public class MyListView extends ListView {
 
     public MyListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-       setOnScrollListener(new OnScrollListener() {
-           @Override
-           public void onScrollStateChanged(AbsListView view, int scrollState) {
+        setOnScrollListener(new OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-           }
+            }
 
-           @Override
-           public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
-           }
-       });
+            }
+        });
     }
 
     @Override
@@ -53,13 +53,12 @@ public class MyListView extends ListView {
             case MotionEvent.ACTION_MOVE:
                 int endX = (int) ev.getRawX();
                 int endY = (int) ev.getRawY();
-                //判断四种情况：
-                //3.上下互动，需要ListView来响应。
                 if (Math.abs(endX - startX) < (Math.abs(endY - startY))) {
                     Log.e(TAG, "onTouchEvent: 取消拦截了！！total" + getCount() + ";;最后可见" + getLastVisiblePosition());
-                    if (endY >= startY && getFirstVisiblePosition() == 0) {//下拉  顶点不处理
+                    Log.e(TAG, "onTouchEvent: " + getScrollY());
+                    if (endY >= startY && getFirstVisiblePosition() == 0 && getChildAt(0).getTop() == 0) {//下拉  顶点不处理
                         getParent().requestDisallowInterceptTouchEvent(false);
-                    } else if (endY < startY && getFirstVisiblePosition() + getChildCount() == getCount()) {
+                    } else if (endY < startY && getFirstVisiblePosition() + getChildCount() == getCount() && getChildAt(getChildCount() - 1).getBottom() == getMeasuredHeight()) {
                         getParent().requestDisallowInterceptTouchEvent(false);
                     }
 

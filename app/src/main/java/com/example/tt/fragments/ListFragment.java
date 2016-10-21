@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,6 +62,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshRecycleVie
         View inflate = inflater.inflate(R.layout.layout_fragment_list, container, false);
         final Toast toast = Toast.makeText(getContext(), "", Toast.LENGTH_SHORT);
         mRecyclerView = (SwipeRefreshRecycleView) inflate.findViewById(R.id.swipe_recycler);
+        ((SwipeRefreshLayout) mRecyclerView.getChildAt(0)).setClipToPadding(false);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(manager);
         adapter = new ListAdapter(currentType);

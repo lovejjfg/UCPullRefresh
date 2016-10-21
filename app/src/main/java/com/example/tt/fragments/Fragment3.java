@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.tt.fragments.base.BaseFragment;
+import com.example.tt.fragments.widget.CurveLayout;
+import com.example.tt.fragments.widget.CurveView;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -57,6 +59,7 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
     TabLayout mTab;
     @Bind(R.id.view_pager)
     ViewPager mViewPager;
+
 
 
 

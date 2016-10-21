@@ -31,7 +31,7 @@ public class NestedHolder extends RecyclerView.ViewHolder {
     private final TextView mContent;
     private final TextView mDate;
     private final ImageView mImg;
-    private final MyListView mList;
+    private final ListView mList;
     private final Context context;
     private final String[] stringArray;
 

@@ -5,8 +5,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.example.tt.fragments.base.BaseFragment;
+import com.example.tt.fragments.pagetransformer.MyListView;
 
 import static android.content.ContentValues.TAG;
 
@@ -20,6 +23,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private ListView listView;
 
     public Fragment4() {
     }
@@ -43,6 +47,8 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_4, container, false);
+        listView = (ListView) rootView.findViewById(R.id.mlist);
+        listView.setAdapter(new ArrayAdapter<>(getContext(), R.layout.layout_text, getContext().getResources().getStringArray(R.array.names)));
         return rootView;
     }
 
