@@ -1,72 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.tt.fragments.widget.CurveLayout
-    android:id="@+id/curve_container"
+
+
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="#fff"
     android:clipChildren="false"
     android:clipToPadding="false"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
+
+    <!--<com.example.tt.fragments.widget.CurveLayout-->
+    <!--android:id="@+id/curve_container"-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="top"-->
+    <!--android:background="#fff"-->
+    <!--android:clipChildren="false"-->
+    <!--android:clipToPadding="false"-->
+    <!--android:orientation="vertical"-->
+    <!--&gt;-->
+
+    <com.example.tt.fragments.widget.CurveView
+        android:id="@+id/ts"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/uc"
+        android:visibility="visible"/>
 
 
-    <LinearLayout
+    <com.example.tt.fragments.widget.CurveLayout
+        android:id="@+id/bottom_sheet"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="bottom"
         android:clipChildren="false"
-        android:orientation="vertical">
-
-        <com.example.tt.fragments.widget.CurveView
-            android:id="@+id/ts"
-            android:visibility="visible"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:background="@drawable/uc"/>
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabMode="scrollable">
-        </android.support.design.widget.TabLayout>
-        <android.support.v4.view.ViewPager
-            android:id="@+id/view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-        </android.support.v4.view.ViewPager>
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/tv_delete"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="删除"/>
 
-            <Button
-                android:id="@+id/tv_add"
-                android:layout_width="0dp"
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="添加"/>
+                android:visibility="gone"
+                app:tabMode="scrollable">
+            </android.support.design.widget.TabLayout>
 
-            <Button
-                android:id="@+id/tv_clear"
-                android:layout_width="0dp"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/view_pager"
+                android:background="#fff"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+            </android.support.v4.view.ViewPager>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="清除"/>
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/tv_delete"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="删除"/>
+
+                <Button
+                    android:id="@+id/tv_add"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="添加"/>
+
+                <Button
+                    android:id="@+id/tv_clear"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="清除"/>
+            </LinearLayout>
         </LinearLayout>
+    </com.example.tt.fragments.widget.CurveLayout>
+    <!--</com.example.tt.fragments.widget.CurveLayout>-->
+</FrameLayout>
 
 
-    </LinearLayout>
-
-</com.example.tt.fragments.widget.CurveLayout>

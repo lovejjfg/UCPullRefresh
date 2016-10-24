@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,9 @@ import android.widget.Toast;
 import com.example.tt.fragments.adapter.ListAdapter;
 import com.example.tt.fragments.base.BaseFragment;
 import com.example.tt.fragments.model.ModelBean;
+import com.example.tt.fragments.widget.CurveLayout;
+import com.example.tt.fragments.widget.HeaderRefreshLayout;
+import com.example.tt.fragments.widget.TouchCircleView;
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
 
 import java.util.ArrayList;
@@ -25,9 +29,9 @@ import java.util.ArrayList;
  * Created by Joe on 2016/10/8.
  * Email lovejjfg@gmail.com
  */
-public class ListFragment extends BaseFragment implements SwipeRefreshRecycleView.OnRefreshLoadMoreListener {
-    private static final String TAG= ListFragment.class.getSimpleName();
-    private SwipeRefreshRecycleView mRecyclerView;
+public class ListFragment extends BaseFragment implements SwipeRefreshRecycleView.OnRefreshLoadMoreListener, TouchCircleView.OnLoadingListener {
+    private static final String TAG = ListFragment.class.getSimpleName();
+    private RecyclerView mRecyclerView;
     private ArrayList<ModelBean> list;
     private ListAdapter adapter;
     private int currentType;
@@ -35,6 +39,8 @@ public class ListFragment extends BaseFragment implements SwipeRefreshRecycleVie
     private boolean isVisible;
     private boolean isUpdate;
     public static final String CURRENT_TYPE = "CURRENT_TYPE";
+    private HeaderRefreshLayout mHeader;
+    private static CurveLayout mCurveLayout;
 
     public ListFragment() {
 
@@ -61,13 +67,13 @@ public class ListFragment extends BaseFragment implements SwipeRefreshRecycleVie
         Log.e(TAG, "onCreateView: 创建View ！！");
         View inflate = inflater.inflate(R.layout.layout_fragment_list, container, false);
         final Toast toast = Toast.makeText(getContext(), "", Toast.LENGTH_SHORT);
-        mRecyclerView = (SwipeRefreshRecycleView) inflate.findViewById(R.id.swipe_recycler);
-        ((SwipeRefreshLayout) mRecyclerView.getChildAt(0)).setClipToPadding(false);
+        mRecyclerView = (RecyclerView) inflate.findViewById(R.id.swipe_recycler);
+        mHeader = (HeaderRefreshLayout) inflate.findViewById(R.id.header_container);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(manager);
         adapter = new ListAdapter(currentType);
         mRecyclerView.setAdapter(adapter);
-        mRecyclerView.setOnRefreshListener(this);
+        mHeader.addLoadingListener(this);
         if (savedInstanceState != null) {
             list = savedInstanceState.getParcelableArrayList("beans");
             if (list != null && list.size() > 0) {
@@ -78,13 +84,13 @@ public class ListFragment extends BaseFragment implements SwipeRefreshRecycleVie
         if (!isRefrsh && isVisible) {
             isRefrsh = true;
             Log.e(TAG, "onCreateView: 在创建的时候请求数据了！！");
-            mRecyclerView.setRefresh(true);
+            mHeader.setRefresh(true);
             getData();
             mRecyclerView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     adapter.setList(list);
-                    mRecyclerView.setRefresh(false);
+                    mHeader.setRefresh(false);
                 }
             }, 1000);
 
@@ -118,7 +124,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshRecycleVie
             @Override
             public void run() {
                 adapter.setList(list);
-                mRecyclerView.setRefresh(false);
+                mHeader.setRefresh(false);
 
             }
         }, 2000);
@@ -147,13 +153,13 @@ public class ListFragment extends BaseFragment implements SwipeRefreshRecycleVie
         if (!isRefrsh && isVisible && mRecyclerView != null) {
             isRefrsh = true;
             Log.e(TAG, "onCreateView: 在创建的时候请求数据了！！");
-//            mRecyclerView.setRefresh(true);
+            mHeader.setRefresh(true);
             getData();
             mRecyclerView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     adapter.setList(list);
-//                    mRecyclerView.setRefresh(false);
+                    mHeader.setRefresh(false);
                 }
             }, 500);
 
@@ -184,4 +190,24 @@ public class ListFragment extends BaseFragment implements SwipeRefreshRecycleVie
         super.onDestroy();
     }
 
+    @Override
+    public void onProgressStateChange(int state, boolean hide) {
+
+    }
+
+    @Override
+    public void onProgressLoading() {
+
+    }
+
+    @Override
+    public void onGoBackHome() {
+        Log.e(TAG, "onGoBackHome: ");
+        mCurveLayout.dismiss();
+    }
+
+
+    public static void setCurveLayout(CurveLayout mBoottom) {
+        mCurveLayout = mBoottom;
+    }
 }

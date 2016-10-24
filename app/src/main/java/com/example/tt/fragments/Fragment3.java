@@ -7,28 +7,28 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.example.tt.fragments.base.BaseFragment;
 import com.example.tt.fragments.widget.CurveLayout;
 import com.example.tt.fragments.widget.CurveView;
+import com.example.tt.fragments.widget.TouchCircleView;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static android.R.attr.id;
+import static com.example.tt.fragments.pagetransformer.MyListView.TAG;
 
 /**
  * Created by Joe on 2016-06-09
  * Email: lovejjfg@gmail.com
  */
-public class Fragment3 extends BaseFragment implements View.OnClickListener {
+public class Fragment3 extends BaseFragment implements View.OnClickListener, TouchCircleView.OnLoadingListener {
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -38,6 +38,7 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
     private String[] names;
     private ArrayList<Fragment> fragments;
     private ViewPagerAdapter mAdapter;
+    private int currentTop;
 
     public Fragment3() {
     }
@@ -62,9 +63,10 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
 
     @Bind(R.id.ts)
     CurveView mCurveView;
-    @Bind(R.id.curve_container)
-    CurveLayout mContainer;
-
+    //    @Bind(R.id.curve_container)
+//    CurveLayout mContainer;
+    @Bind(R.id.bottom_sheet)
+    CurveLayout mBoottom;
 
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -82,30 +84,60 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
         mViewPager.setPageTransformer(false, pageTransformer);
         names = getResources().getStringArray(R.array.names);
         fragments = initFragment();
-        mCurveView.setTarget(mViewPager);
-        mContainer.addmDispatcher(mCurveView);
+//        mCurveView.setTarget(mViewPager);
+//        mContainer.addmDispatcher(mCurveView);
         mAdapter = new ViewPagerAdapter(getChildFragmentManager(), fragments);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setOffscreenPageLimit(fragments.size());
         mTab.setupWithViewPager(mViewPager);
+        ListFragment.setCurveLayout(mBoottom);
+        mBoottom.registerCallback(new CurveLayout.Callbacks() {
+
+            private int dy;
+
+            @Override
+            public void onSheetExpanded() {
+                Log.e(TAG, "onSheetExpanded: ");
+                mCurveView.onDispatchUp();
+                dy = 0;
+            }
+
+            @Override
+            public void onSheetNarrowed() {
+                Log.e(TAG, "onSheetNarrowed: ");
+                mCurveView.onDispatchUp();
+                dy = 0;
+            }
+
+            @Override
+            public void onSheetPositionChanged(int sheetTop, float currentX, boolean userInteracted) {
+                if (currentTop == 0) {
+                    currentTop = sheetTop;
+                }
+                dy += sheetTop - currentTop;
+                Log.e(TAG, "onSheetPositionChanged:dydydydy " + dy);
+                Log.e(TAG, "onSheetPositionChanged:dxdxdxdxdx " + currentX);
+                mCurveView.onDispatch(currentX, dy);
+                currentTop = sheetTop;
+            }
+        });
 
 //        setUpIndicatorWidth();
         return rootView;
     }
 
 
-
     @NonNull
     private ArrayList<Fragment> initFragment() {
         ArrayList<Fragment> fragments = new ArrayList<>(8);
-        fragments.add( ListFragment.newInstance(Constants.TYPE_NORMAL));
-        fragments.add( ListFragment.newInstance(Constants.TYPE_BIG_IMG));
-        fragments.add( ListFragment.newInstance(Constants.TYPE_NORMAL));
-        fragments.add( ListFragment.newInstance(Constants.TYPE_BIG_IMG));
-        fragments.add( ListFragment.newInstance(Constants.TYPE_NORMAL));
-        fragments.add( ListFragment.newInstance(Constants.TYPE_BIG_IMG));
-        fragments.add( ListFragment.newInstance(Constants.TYPE_NORMAL));
-        fragments.add( ListFragment.newInstance(Constants.TYPE_BIG_IMG));
+        fragments.add(ListFragment.newInstance(Constants.TYPE_NORMAL));
+        fragments.add(ListFragment.newInstance(Constants.TYPE_BIG_IMG));
+        fragments.add(ListFragment.newInstance(Constants.TYPE_NORMAL));
+        fragments.add(ListFragment.newInstance(Constants.TYPE_BIG_IMG));
+        fragments.add(ListFragment.newInstance(Constants.TYPE_NORMAL));
+        fragments.add(ListFragment.newInstance(Constants.TYPE_BIG_IMG));
+        fragments.add(ListFragment.newInstance(Constants.TYPE_NORMAL));
+        fragments.add(ListFragment.newInstance(Constants.TYPE_BIG_IMG));
         return fragments;
     }
 
@@ -115,9 +147,9 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
         if (i == R.id.tv_clear) {
             fragments.clear();
         } else if (i == R.id.tv_add) {
-            ListFragment fragment1 =  ListFragment.newInstance(Constants.TYPE_NORMAL);
+            ListFragment fragment1 = ListFragment.newInstance(Constants.TYPE_NORMAL);
             fragment1.setUpdate(true);
-            fragments.add(0,fragment1);
+            fragments.add(0, fragment1);
         } else if (i == R.id.tv_delete) {
             ListFragment remove = (ListFragment) fragments.remove(0);
             remove.setUpdate(true);
@@ -126,6 +158,21 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
         mViewPager.setOffscreenPageLimit(fragments.size());
         mViewPager.setCurrentItem(mViewPager.getCurrentItem() == fragments.size() ? fragments.size() - 1 : mViewPager.getCurrentItem());
         mTab.setupWithViewPager(mViewPager);
+    }
+
+    @Override
+    public void onProgressStateChange(int state, boolean hide) {
+
+    }
+
+    @Override
+    public void onProgressLoading() {
+
+    }
+
+    @Override
+    public void onGoBackHome() {
+        mBoottom.dismiss();
     }
 
 //    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -148,6 +195,5 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
 //            e.printStackTrace();
 //        }
 //    }
-
 
 }

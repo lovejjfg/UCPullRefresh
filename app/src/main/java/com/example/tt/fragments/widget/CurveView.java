@@ -21,19 +21,19 @@ import butterknife.ButterKnife;
  * Created by Joe on 2016-06-16
  * Email: lovejjfg@gmail.com
  */
-public class CurveView extends View implements CurveLayout.Dispatcher {
+public class CurveView extends View  {
     private static final String TAG = "TEST";
     private Paint paint;
     private Path path;
     private float currentX;
     private float currentY;
-    private View targetView;
+//    private View targetView;
     @BindColor(R.color.uc_blue)
     int UC_COLOR;
     @BindDimen(R.dimen.max_drag)
     int MAX_DRAG;
-    private ViewOffsetHelper sheetOffsetHelper;
-    private int targetHeight;
+//    private ViewOffsetHelper sheetOffsetHelper;
+//    private int targetHeight;
 
 
     public CurveView(Context context) {
@@ -92,20 +92,20 @@ public class CurveView extends View implements CurveLayout.Dispatcher {
         canvas.drawPath(path, paint);
     }
 
-    public void setTarget(View mView) {
-        targetView = mView;
-        targetHeight = targetView.getHeight();
-        Log.e(TAG, "setTarget: " + targetHeight);
-        sheetOffsetHelper = new ViewOffsetHelper(targetView);
-    }
+//    public void setTarget(View mView) {
+//        targetView = mView;
+//        targetHeight = targetView.getHeight();
+//        Log.e(TAG, "setTarget: " + targetHeight);
+//        sheetOffsetHelper = new ViewOffsetHelper(targetView);
+//    }
 
-    @Override
+
     public void onDispatch(float dx, float dy) {
         currentY = dy > MAX_DRAG ? MAX_DRAG : dy;
         float ddy = dy - currentY;
         currentX = dx;
         Log.e(TAG, "onDispatch: " + ddy);
-        targetView.setTranslationY(currentY * 0.5f);
+//        targetView.setTranslationY(currentY * 0.5f);
         if (dy > 0) {
             invalidate();
         } else {
@@ -114,17 +114,9 @@ public class CurveView extends View implements CurveLayout.Dispatcher {
 
     }
 
-    @Override
+
     public void onDispatchUp() {
         currentY = 0;
-        sheetOffsetHelper.resyncOffsets();
-        ViewGroup.LayoutParams layoutParams = targetView.getLayoutParams();
-        layoutParams.height -= currentY;
-        targetView.setLayoutParams(layoutParams);
-        targetView.requestLayout();
-
-        targetView.setTranslationY(currentY);
-
         invalidate();
     }
 }
