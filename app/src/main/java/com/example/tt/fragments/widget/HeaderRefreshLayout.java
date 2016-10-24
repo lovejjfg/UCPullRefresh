@@ -35,9 +35,8 @@ import android.widget.FrameLayout;
 
 @SuppressWarnings("unused")
 public class HeaderRefreshLayout extends FrameLayout implements NestedScrollingParent, NestedScrollingChild, TouchCircleView.OnLoadingListener {
-    private String TAG = HeaderRefreshLayout.class.getSimpleName();
+    private static String TAG = "HeaderRefresh";
     // configurable attribs
-
     // state
     private float totalDrag;
     private TouchCircleView header;
@@ -81,6 +80,12 @@ public class HeaderRefreshLayout extends FrameLayout implements NestedScrollingP
 
 
     // NestedScrollingChild
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        setNestedScrollingEnabled(enabled);
+        super.setEnabled(enabled);
+    }
 
     @Override
     public void setNestedScrollingEnabled(boolean enabled) {
@@ -171,7 +176,8 @@ public class HeaderRefreshLayout extends FrameLayout implements NestedScrollingP
     @Override
     public boolean onNestedFling(View target, float velocityX, float velocityY, boolean consumed) {
         if (!header.ismRunning() && !consumed) {
-            updateOffset((int) velocityY);
+            float v = velocityY * 0.3f;
+            updateOffset((int) (v));
             return true;
         }
         return false;
@@ -181,7 +187,7 @@ public class HeaderRefreshLayout extends FrameLayout implements NestedScrollingP
     private void updateOffset(int dyUnconsumed) {
 
         totalDrag -= dyUnconsumed * 0.5;
-        Log.i(TAG, "updateOffset: " + totalDrag);
+        Log.e(TAG, "updateOffset: " + totalDrag);
         if (totalDrag < 0) {
             totalDrag = 0;
         }
@@ -203,7 +209,7 @@ public class HeaderRefreshLayout extends FrameLayout implements NestedScrollingP
     @Override
     public void onStopNestedScroll(View child) {
         mNestedScrollingParentHelper.onStopNestedScroll(child);
-        Log.i(TAG, "onStopNestedScroll: ");
+        Log.e(TAG, "onStopNestedScroll: ");
         header.resetTouch();
     }
 
@@ -250,23 +256,10 @@ public class HeaderRefreshLayout extends FrameLayout implements NestedScrollingP
         }
     }
 
-    int i = 1;
 
     @Override
     public void onProgressLoading() {
         resetDrag((int) (header.getHeight() * 0.6f));
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                i++;
-                if (i % 2 == 1) {
-                    setRefreshSuccess();
-                } else {
-                    setRefreshError();
-                }
-
-            }
-        }, 2500);
     }
 
     @Override
@@ -293,7 +286,7 @@ public class HeaderRefreshLayout extends FrameLayout implements NestedScrollingP
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        Log.e("TAG", "onInterceptTouchEvent: ....");
+        Log.e(TAG, "onInterceptTouchEvent: ....");
         if (!scrollble) {
             return header.ismRunning() || super.onInterceptTouchEvent(ev);
         } else {

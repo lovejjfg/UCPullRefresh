@@ -41,13 +41,12 @@ import com.example.tt.fragments.utils.ViewOffsetHelper;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.example.tt.fragments.pagetransformer.MyListView.TAG;
 
 
 /**
  */
 public class CurveLayout extends FrameLayout {
-
+    private static final String TAG = "CurveLayout";
     // constants
     private static final int MIN_SETTLE_VELOCITY = 6000; // px/s
     private final int MIN_FLING_VELOCITY;
@@ -68,6 +67,7 @@ public class CurveLayout extends FrameLayout {
     private boolean initialHeightChecked = false;
     private boolean hasInteractedWithSheet = false;
     private float currentX;
+    private int currentTop;
 
     public CurveLayout(Context context) {
         this(context, null, 0);
@@ -95,7 +95,7 @@ public class CurveLayout extends FrameLayout {
         public void onSheetExpanded() {
         }
 
-        public void onSheetPositionChanged(int sheetTop, float currentX, boolean userInteracted) {
+        public void onSheetPositionChanged(int sheetTop, float currentX, int dy, boolean userInteracted) {
         }
     }
 
@@ -121,6 +121,8 @@ public class CurveLayout extends FrameLayout {
     }
 
     public boolean isExpanded() {
+        Log.e(TAG, "isExpanded: top:" + sheet.getTop() + ";;;sheetExpandedTop:" + sheetExpandedTop);
+
         return sheet.getTop() == sheetExpandedTop;
     }
 
@@ -152,15 +154,15 @@ public class CurveLayout extends FrameLayout {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         currentX = ev.getRawX();
         Log.e(TAG, "BottomSheet onInterceptTouchEvent: " + currentX);
-        hasInteractedWithSheet = true;
-        if (isNestedScrolling) return false;    /* prefer nested scrolling to dragging */
-
-        final int action = MotionEventCompat.getActionMasked(ev);
         if (isExpanded()) {
             Log.e(TAG, "已经展开了！！！: " + currentX);
             sheetDragHelper.cancel();
             return false;
         }
+        hasInteractedWithSheet = true;
+        if (isNestedScrolling) return false;    /* prefer nested scrolling to dragging */
+
+        final int action = MotionEventCompat.getActionMasked(ev);
         if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
             sheetDragHelper.cancel();
             return false;
@@ -382,6 +384,7 @@ public class CurveLayout extends FrameLayout {
             sheetExpandedTop = top;
             sheetBottom = bottom;
             dismissOffset = (int) ((600));
+            currentTop = sheet.getTop();
             sheetOffsetHelper.onViewLayout();
 
             // modal bottom sheet content should not initially be taller than the 16:9 keyline
@@ -420,9 +423,11 @@ public class CurveLayout extends FrameLayout {
     }
 
     private void dispatchPositionChangedCallback() {
+       int dy = sheet.getTop() - currentTop;
+        currentTop = sheet.getTop();
         if (callbacks != null && !callbacks.isEmpty()) {
             for (Callbacks callback : callbacks) {
-                callback.onSheetPositionChanged(sheet.getTop(), currentX, hasInteractedWithSheet);
+                callback.onSheetPositionChanged(sheet.getTop(), currentX,dy, hasInteractedWithSheet);
                 if (isExpanded()) {
                     callback.onSheetExpanded();
                 }

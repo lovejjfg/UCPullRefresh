@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * Created by Joe on 2016/10/8.
  * Email lovejjfg@gmail.com
  */
-public class ListFragment extends BaseFragment implements SwipeRefreshRecycleView.OnRefreshLoadMoreListener, TouchCircleView.OnLoadingListener {
+public class ListFragment extends BaseFragment implements  TouchCircleView.OnLoadingListener {
     private static final String TAG = ListFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private ArrayList<ModelBean> list;
@@ -81,19 +81,11 @@ public class ListFragment extends BaseFragment implements SwipeRefreshRecycleVie
                 isRefrsh = true;
             }
         }
-        if (!isRefrsh && isVisible) {
+        if (mCurveLayout.isExpanded() && !isRefrsh && isVisible) {
             isRefrsh = true;
             Log.e(TAG, "onCreateView: 在创建的时候请求数据了！！");
             mHeader.setRefresh(true);
             getData();
-            mRecyclerView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.setList(list);
-                    mHeader.setRefresh(false);
-                }
-            }, 1000);
-
         }
         adapter.setTotalCount(50);
         adapter.setListener(new OnItemClickListener() {
@@ -102,6 +94,18 @@ public class ListFragment extends BaseFragment implements SwipeRefreshRecycleVie
             public void onItemClick(View itemView, ImageView image, int id) {
                 toast.setText(String.format("这是第%d个", id));
                 toast.show();
+            }
+        });
+
+        mCurveLayout.registerCallback(new CurveLayout.Callbacks() {
+            @Override
+            public void onSheetExpanded() {
+                mHeader.setEnabled(true);
+            }
+
+            @Override
+            public void onSheetNarrowed() {
+                mHeader.setEnabled(false);
             }
         });
 
@@ -117,30 +121,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshRecycleVie
         }
     }
 
-    @Override
-    public void onRefresh() {
-        getData();
-        mRecyclerView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                adapter.setList(list);
-                mHeader.setRefresh(false);
 
-            }
-        }, 2000);
-
-    }
-
-    @Override
-    public void onLoadMore() {
-        getData();
-        mRecyclerView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                adapter.appendList(list);
-            }
-        }, 2000);
-    }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -150,19 +131,11 @@ public class ListFragment extends BaseFragment implements SwipeRefreshRecycleVie
             Log.e(TAG, "setUserVisibleHint: 不可见了！！");
         }
         isVisible = isVisibleToUser;
-        if (!isRefrsh && isVisible && mRecyclerView != null) {
+        if (mCurveLayout.isExpanded()&&!isRefrsh && isVisible && mRecyclerView != null) {
             isRefrsh = true;
             Log.e(TAG, "onCreateView: 在创建的时候请求数据了！！");
             mHeader.setRefresh(true);
             getData();
-            mRecyclerView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.setList(list);
-                    mHeader.setRefresh(false);
-                }
-            }, 500);
-
         }
 
         super.setUserVisibleHint(isVisibleToUser);
@@ -197,7 +170,15 @@ public class ListFragment extends BaseFragment implements SwipeRefreshRecycleVie
 
     @Override
     public void onProgressLoading() {
+        getData();
+        mRecyclerView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                adapter.setList(list);
+                mHeader.setRefreshSuccess();
 
+            }
+        }, 1000);
     }
 
     @Override
@@ -210,4 +191,6 @@ public class ListFragment extends BaseFragment implements SwipeRefreshRecycleVie
     public static void setCurveLayout(CurveLayout mBoottom) {
         mCurveLayout = mBoottom;
     }
+
+
 }

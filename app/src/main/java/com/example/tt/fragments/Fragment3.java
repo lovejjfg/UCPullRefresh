@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.example.tt.fragments.base.BaseFragment;
 import com.example.tt.fragments.widget.CurveLayout;
 import com.example.tt.fragments.widget.CurveView;
+import com.example.tt.fragments.widget.ScrollAbleViewPager;
 import com.example.tt.fragments.widget.TouchCircleView;
 
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener, Tou
     @Bind(R.id.tab)
     TabLayout mTab;
     @Bind(R.id.view_pager)
-    ViewPager mViewPager;
+    ScrollAbleViewPager mViewPager;
 
     @Bind(R.id.ts)
     CurveView mCurveView;
@@ -67,6 +68,7 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener, Tou
 //    CurveLayout mContainer;
     @Bind(R.id.bottom_sheet)
     CurveLayout mBoottom;
+    private int mCurveViewHeight;
 
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -89,16 +91,21 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener, Tou
         mAdapter = new ViewPagerAdapter(getChildFragmentManager(), fragments);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setOffscreenPageLimit(fragments.size());
+        mViewPager.setScrollable(mBoottom.isExpanded());
         mTab.setupWithViewPager(mViewPager);
         ListFragment.setCurveLayout(mBoottom);
         mBoottom.registerCallback(new CurveLayout.Callbacks() {
-
             private int dy;
 
             @Override
             public void onSheetExpanded() {
                 Log.e(TAG, "onSheetExpanded: ");
                 mCurveView.onDispatchUp();
+                mCurveView.setTranslationY(0);
+                mCurveView.setTranslationY(0);
+                mCurveView.setScaleX(1.f);
+                mCurveView.setScaleY(1.f);
+                mViewPager.setScrollable(true);
                 dy = 0;
             }
 
@@ -106,19 +113,37 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener, Tou
             public void onSheetNarrowed() {
                 Log.e(TAG, "onSheetNarrowed: ");
                 mCurveView.onDispatchUp();
+                mCurveView.setTranslationY(0);
+                mCurveView.setScaleX(1.f);
+                mCurveView.setScaleY(1.f);
+                mViewPager.setScrollable(false);
                 dy = 0;
             }
 
             @Override
-            public void onSheetPositionChanged(int sheetTop, float currentX, boolean userInteracted) {
+            public void onSheetPositionChanged(int sheetTop, float currentX, int dy, boolean userInteracted) {
+                Log.e(TAG, "onSheetPositionChanged: " + dy);
+                if (mCurveViewHeight == 0) {
+                    mCurveViewHeight = mCurveView.getHeight();
+                }
                 if (currentTop == 0) {
                     currentTop = sheetTop;
                 }
-                dy += sheetTop - currentTop;
-                Log.e(TAG, "onSheetPositionChanged:dydydydy " + dy);
-                Log.e(TAG, "onSheetPositionChanged:dxdxdxdxdx " + currentX);
-                mCurveView.onDispatch(currentX, dy);
+                this.dy += sheetTop - currentTop;
                 currentTop = sheetTop;
+                Log.e(TAG, "onSheetPositionChanged:dydydydy " + this.dy);
+                Log.e(TAG, "onSheetPositionChanged:dxdxdxdxdx " + currentX);
+
+                float fraction = 1 - sheetTop * 1.0f / mCurveViewHeight;
+                Log.e(TAG, "onSheetPositionChanged: fraction:" + fraction);
+                Log.e(TAG, "onSheetPositionChanged: setTranslationY:" + this.dy * 0.2f);
+                if (fraction >= 0 && !mBoottom.isExpanded()) {//向上拉
+                    mCurveView.setTranslationY(this.dy * 0.2f);
+                } else if (fraction < 0 && !mBoottom.isExpanded()) {//向下拉
+                    mCurveView.onDispatch(currentX, this.dy);
+                    mCurveView.setScaleX(1 - fraction * 0.5f);
+                    mCurveView.setScaleY(1 - fraction * 0.5f);
+                }
             }
         });
 

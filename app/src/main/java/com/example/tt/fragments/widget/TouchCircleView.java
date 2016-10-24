@@ -20,13 +20,14 @@ import android.util.Log;
 import android.util.Property;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
-
 
 import com.example.tt.fragments.R;
 
 import java.util.ArrayList;
+
 
 
 /**
@@ -34,6 +35,7 @@ import java.util.ArrayList;
  * Email lovejjfg@gmail.com
  */
 public class TouchCircleView extends View {
+    private static String TAG = "HeaderRefresh";
     float firstRange;
     float secRange;
     float thirdRange;
@@ -42,8 +44,6 @@ public class TouchCircleView extends View {
     private RectF secondRectf;
     private Paint innerPaint;
     private Paint paint;
-    private Paint circlePaint;
-    private Paint clearPaint;
 
 
     private Path path;
@@ -204,7 +204,7 @@ public class TouchCircleView extends View {
             currentOffset = percent * defaultOffset;
             updateRectF();
             angle = (long) (percent * 360);
-            Log.i("TAG", "onTouchEvent: " + angle);
+            Log.i(TAG, "onTouchEvent: " + angle);
             invalidate();
             return;
         }
@@ -220,7 +220,7 @@ public class TouchCircleView extends View {
         }
         //正常顺序到达这里
         if ((currentState == STATE_DRAW_ARROW || currentState == STATE_DRAW_PATH) && dy > secRange && dy <= thirdRange) {
-            Log.e("TAG", "handleOffset: 画正常的PATH了" + dy);
+            Log.e(TAG, "handleOffset: 画正常的PATH了" + dy);
             updateState(STATE_DRAW_PATH, false);
 //            paths = dy - 380;
             percent = (dy - secRange) / (thirdRange - secRange);
@@ -234,7 +234,7 @@ public class TouchCircleView extends View {
         }
 
         if ((currentState == STATE_DRAW_CIRCLE || currentState == STATE_DRAW_OUT_PATH) && dy > secRange && dy <= thirdRange) {
-            Log.e("TAG", "handleOffset: 画PATH了" + dy);
+            Log.e(TAG, "handleOffset: 画PATH了" + dy);
             updateState(STATE_DRAW_OUT_PATH, false);
             percent = (thirdRange - dy) / (thirdRange - secRange);
             Log.e("percent", "handleOffset: " + percent);
@@ -249,7 +249,7 @@ public class TouchCircleView extends View {
 
 
         if (dy > thirdRange) {
-            Log.e("TAG", "handleOffset: 画第二个圆形了" + dy);
+            Log.e(TAG, "handleOffset: 画第二个圆形了" + dy);
             updateState(STATE_DRAW_CIRCLE, false);
             secondRectf.set(centerX - secondRadius, centerY - secondRadius + currentOffset + secondRadius * 2, centerX + secondRadius
                     , centerY + secondRadius + currentOffset + secondRadius * 2);
@@ -296,7 +296,7 @@ public class TouchCircleView extends View {
             return;
         }
         if (STATE_DRAW_CIRCLE == currentState) {
-            updateState(STATE_DRAW_BACK, true);
+            updateState(STATE_DRAW_BACK, false);
         }
         stop();
         updateState(STATE_DRAW_IDLE, true);
@@ -310,15 +310,6 @@ public class TouchCircleView extends View {
     }
 
     private void initPaintPath() {
-        clearPaint = new Paint();
-        clearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-
-        circlePaint = new Paint();
-        circlePaint.setColor(Color.BLUE);
-        circlePaint.setStrokeWidth(10);
-        circlePaint.setStyle(Paint.Style.STROKE);
-        circlePaint.setAntiAlias(true);
-        circlePaint.setAlpha(50);
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStyle(Paint.Style.FILL);
@@ -371,7 +362,7 @@ public class TouchCircleView extends View {
         //动画的
         switch (currentState) {
             case STATE_DRAW_IDLE:
-//                canvas.drawArc(outRectF, 0, 0, false, paint);
+                canvas.drawArc(outRectF, 0, 0, false, paint);
                 break;
             case STATE_DRAW_ARC:
 //                setVisibility(VISIBLE);
@@ -552,7 +543,7 @@ public class TouchCircleView extends View {
         if (!fractionAnimator.isRunning()) {
             fractionAnimator.start();
         }
-        updateState(currentState, true, true);
+        updateState(currentState, false, false);
         invalidate();
     }
 
@@ -606,7 +597,16 @@ public class TouchCircleView extends View {
         }
     };
 
+    private Runnable idleAction = new Runnable() {
+        @Override
+        public void run() {
+            currentState = STATE_DRAW_IDLE;
+            updateState(currentState, true);
+            invalidate();
+        }
+    };
     private void setupAnimations() {
+
         mObjectAnimatorAngle = ObjectAnimator.ofFloat(this, mAngleProperty, mCurrentGlobalAngle, 360f);
         mObjectAnimatorAngle.setInterpolator(ANGLE_INTERPOLATOR);
         mObjectAnimatorAngle.setDuration(ANGLE_ANIMATOR_DURATION);
@@ -634,14 +634,22 @@ public class TouchCircleView extends View {
 
         fractionAnimator = ValueAnimator.ofInt(0, ALPHA_FULL);
         fractionAnimator.setInterpolator(ANGLE_INTERPOLATOR);
-        fractionAnimator.setDuration(100);
+        fractionAnimator.setDuration(300);
         fractionAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 fraction = animation.getAnimatedFraction();
                 mHookPaint.setAlpha((Integer) animation.getAnimatedValue());
-
                 invalidate();
+            }
+        });
+        fractionAnimator.addListener(new AnimatorListenerAdapter() {
+
+
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                postDelayed(idleAction, 300);
             }
         });
     }
@@ -695,11 +703,18 @@ public class TouchCircleView extends View {
     }
 
     public void setRefreshError() {
+        if (currentState == STATE_DRAW_ERROR) {
+            return;
+        }
         currentState = STATE_DRAW_ERROR;
         finish();
     }
 
     public void setRefreshSuccess() {
+        Log.e(TAG, "setRefreshSuccess: ");
+        if (currentState == STATE_DRAW_SUCCESS) {
+            return;
+        }
         currentState = STATE_DRAW_SUCCESS;
         finish();
     }

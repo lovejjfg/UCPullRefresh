@@ -5,8 +5,6 @@
     android:id="@+id/header_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipChildren="false"
-    android:clipToPadding="false"
     >
 
     <android.support.v7.widget.RecyclerView
@@ -14,8 +12,6 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipChildren="false"
-        android:clipToPadding="false"
         >
     </android.support.v7.widget.RecyclerView>
 </com.example.tt.fragments.widget.HeaderRefreshLayout>
