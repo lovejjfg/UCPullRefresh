@@ -22,6 +22,8 @@ import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
@@ -42,13 +44,16 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
-
 /**
  */
 public class CurveLayout extends FrameLayout {
     private static final String TAG = "CurveLayout";
+    private static final String KEY_DEFAULT = "key_default";
+    private static final String KEY_EXPAND = "key_expand";
+    private static final String KEY_DISMISS_OFFSET = "key_dismissoffset";
     // constants
     private static final int MIN_SETTLE_VELOCITY = 6000; // px/s
+
     private final int MIN_FLING_VELOCITY;
 
     // child views & helpers
@@ -129,7 +134,7 @@ public class CurveLayout extends FrameLayout {
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
         if (sheet != null) {
-            throw new UnsupportedOperationException("BottomSheet must only have 1 child view");
+            throw new UnsupportedOperationException("CurveLayout must only have 1 child view");
         }
         sheet = child;
 //        checkTarget(child);
@@ -239,7 +244,7 @@ public class CurveLayout extends FrameLayout {
 
     @Override
     public boolean onNestedFling(View target, float velocityX, float velocityY, boolean consumed) {
-       if (velocityY > 0 && !isExpanded()) {
+        if (velocityY > 0 && !isExpanded()) {
             animateSettle(0, velocityY);
         }
         return false;
@@ -264,6 +269,7 @@ public class CurveLayout extends FrameLayout {
 
     private void animateSettle(int initialOffset, final int targetOffset, float initialVelocity) {
         if (settling) return;
+        Log.e(TAG, "animateSettle:TopAndBottom :::" + sheetOffsetHelper.getTopAndBottomOffset());
         if (sheetOffsetHelper.getTopAndBottomOffset() == targetOffset) {
             if (targetOffset >= dismissOffset) {
                 dispatchDismissCallback();
@@ -372,6 +378,7 @@ public class CurveLayout extends FrameLayout {
         public void onViewReleased(View releasedChild, float velocityX, float velocityY) {
             // dismiss on downward fling, otherwise settle back to expanded position
             final boolean dismiss = velocityY >= MIN_FLING_VELOCITY;
+            Log.e(TAG, "onViewReleased->dismiss:" + dismiss);
             animateSettle(dismiss ? dismissOffset : 0, velocityY);
         }
 
@@ -423,15 +430,44 @@ public class CurveLayout extends FrameLayout {
     }
 
     private void dispatchPositionChangedCallback() {
-       int dy = sheet.getTop() - currentTop;
+        int dy = sheet.getTop() - currentTop;
         currentTop = sheet.getTop();
         if (callbacks != null && !callbacks.isEmpty()) {
             for (Callbacks callback : callbacks) {
-                callback.onSheetPositionChanged(sheet.getTop(), currentX,dy, hasInteractedWithSheet);
+                callback.onSheetPositionChanged(sheet.getTop(), currentX, dy, hasInteractedWithSheet);
                 if (isExpanded()) {
                     callback.onSheetExpanded();
                 }
             }
         }
     }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(KEY_DEFAULT, super.onSaveInstanceState());
+        bundle.putBoolean(KEY_EXPAND, isExpanded());
+        bundle.putInt(KEY_DISMISS_OFFSET, dismissOffset);
+        return bundle;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if (state instanceof Bundle) {
+            Bundle bundle = (Bundle) state;
+            super.onRestoreInstanceState(bundle.getParcelable(KEY_DEFAULT));
+            boolean b = bundle.getBoolean(KEY_EXPAND);
+            dismissOffset = bundle.getInt(KEY_DISMISS_OFFSET);
+            if (b) {
+                Log.e(TAG, "onRestoreInstanceState: 读取缓存，展开了！");
+                dismiss();
+            } else {
+                Log.e(TAG, "onRestoreInstanceState: 读取缓存，关闭了了！");
+                expand();
+            }
+            return;
+        }
+        super.onRestoreInstanceState(state);
+    }
+
 }

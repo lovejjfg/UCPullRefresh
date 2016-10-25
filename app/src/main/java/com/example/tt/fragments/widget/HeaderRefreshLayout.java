@@ -17,6 +17,8 @@
 package com.example.tt.fragments.widget;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.NestedScrollingChild;
@@ -25,6 +27,7 @@ import android.support.v4.view.NestedScrollingParent;
 import android.support.v4.view.NestedScrollingParentHelper;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -166,6 +169,9 @@ public class HeaderRefreshLayout extends FrameLayout implements NestedScrollingP
     @Override
     public void onNestedScroll(View target, int dxConsumed, int dyConsumed,
                                int dxUnconsumed, int dyUnconsumed) {
+        if (Math.abs(dyUnconsumed) > 150) {
+            return;
+        }
         if (!header.ismRunning() && dyUnconsumed < 0) {
             Log.e(TAG, "onNestedScroll:未消费：： " + dyUnconsumed);
             updateOffset(dyUnconsumed);
@@ -191,8 +197,8 @@ public class HeaderRefreshLayout extends FrameLayout implements NestedScrollingP
         if (totalDrag < 0) {
             totalDrag = 0;
         }
-        if (totalDrag > header.getHeight() * 1.5) {
-            totalDrag = header.getHeight() * 1.5f;
+        if (totalDrag > header.getHeight() * 1.6f) {
+            totalDrag = header.getHeight() * 1.6f;
         }
         if (targetView != null) {
             targetView.setTranslationY(totalDrag);

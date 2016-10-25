@@ -121,4 +121,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onBackPressed();
     }
 
+    @Override
+    protected void onDestroy() {
+        ListFragment.setCurveLayout(null);
+        super.onDestroy();
+    }
 }
