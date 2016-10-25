@@ -444,6 +444,7 @@ public class CurveLayout extends FrameLayout {
 
     @Override
     protected Parcelable onSaveInstanceState() {
+        // TODO: 2016/10/25 恢复的时候，状态乱了
         Bundle bundle = new Bundle();
         bundle.putParcelable(KEY_DEFAULT, super.onSaveInstanceState());
         bundle.putBoolean(KEY_EXPAND, isExpanded());

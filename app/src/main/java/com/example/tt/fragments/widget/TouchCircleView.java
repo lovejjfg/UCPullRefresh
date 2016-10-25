@@ -139,7 +139,7 @@ public class TouchCircleView extends View {
         return outCirRadius;
     }
 
-    private int outCirRadius = 100;
+    private int outCirRadius = 200;
     private int secondRadius = (int) (outCirRadius * 1f);
     private int innerCirRadius = outCirRadius - 30;
     private static int ARROW_WIDTH = 20 * 2;
@@ -171,9 +171,9 @@ public class TouchCircleView extends View {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.HeaderProgress, defStyleAttr, 0);
         mBorderWidth = a.getDimension(R.styleable.HeaderProgress_circleBorderWidth,
                 2 * density);
-        outCirRadius = (int) a.getDimension(R.styleable.HeaderProgress_outRadius, 20 * density);
+        outCirRadius = (int) a.getDimension(R.styleable.HeaderProgress_outRadius, 18 * density);
         innerCirRadius = (int) a.getDimension(R.styleable.HeaderProgress_innerRadius, 12 * density);
-        secondRadius = (int) (outCirRadius * 1.3f);
+        secondRadius = (int) (outCirRadius * 1.5f);
         innerCirRadius = (int) (outCirRadius * 0.6f);
         a.recycle();
         initView();

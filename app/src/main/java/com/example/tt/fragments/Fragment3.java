@@ -93,6 +93,7 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener, Tou
         mViewPager.setOffscreenPageLimit(fragments.size());
         mViewPager.setScrollable(mBoottom.isExpanded());
         mTab.setupWithViewPager(mViewPager);
+        // TODO: 2016/10/25解耦CurveLayout 和子Fragment 不然会有内存泄露的问题
         ListFragment.setCurveLayout(mBoottom);
         mBoottom.registerCallback(new CurveLayout.Callbacks() {
             private int dy;
@@ -101,7 +102,6 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener, Tou
             public void onSheetExpanded() {
                 Log.e(TAG, "onSheetExpanded: ");
                 mCurveView.onDispatchUp();
-                mCurveView.setTranslationY(0);
                 mCurveView.setTranslationY(0);
                 mCurveView.setScaleX(1.f);
                 mCurveView.setScaleY(1.f);
@@ -121,14 +121,15 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener, Tou
             }
 
             @Override
-            public void onSheetPositionChanged(int sheetTop, float currentX, int dy, boolean userInteracted) {
-                Log.e(TAG, "onSheetPositionChanged: " + dy);
+            public void onSheetPositionChanged(int sheetTop, float currentX, int ddy, boolean userInteracted) {
+                Log.e(TAG, "onSheetPositionChanged:userInteracted " + userInteracted);
                 if (mCurveViewHeight == 0) {
                     mCurveViewHeight = mCurveView.getHeight();
                 }
                 if (currentTop == 0) {
                     currentTop = sheetTop;
                 }
+                // TODO: 2016/10/25 回退的时候不走变化最好
                 this.dy += sheetTop - currentTop;
                 currentTop = sheetTop;
                 Log.e(TAG, "onSheetPositionChanged:dydydydy " + this.dy);
