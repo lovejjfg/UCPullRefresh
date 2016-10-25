@@ -539,6 +539,7 @@ public class TouchCircleView extends View {
 
     public void finish() {
         stop();
+        mRunning = true;
         resetAngle();
         if (!fractionAnimator.isRunning()) {
             fractionAnimator.start();
@@ -559,9 +560,10 @@ public class TouchCircleView extends View {
         if (!mRunning) {
             return;
         }
-        mRunning = false;
+//        mRunning = false;
         mObjectAnimatorAngle.cancel();
         mObjectAnimatorSweep.cancel();
+//        mRunning = fractionAnimator.isRunning();
     }
 
     private void toggleAppearingMode() {
@@ -600,6 +602,7 @@ public class TouchCircleView extends View {
     private Runnable idleAction = new Runnable() {
         @Override
         public void run() {
+            mRunning = false;
             currentState = STATE_DRAW_IDLE;
             updateState(currentState, true);
             invalidate();

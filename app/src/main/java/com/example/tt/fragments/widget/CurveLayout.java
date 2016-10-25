@@ -55,6 +55,7 @@ public class CurveLayout extends FrameLayout {
     private static final int MIN_SETTLE_VELOCITY = 6000; // px/s
 
     private final int MIN_FLING_VELOCITY;
+    private final int MIN_DRAG_DISTANCE = 200;
 
     // child views & helpers
     private View sheet;
@@ -72,7 +73,8 @@ public class CurveLayout extends FrameLayout {
     private boolean initialHeightChecked = false;
     private boolean hasInteractedWithSheet = false;
     private float currentX;
-    private int currentTop;
+    private boolean canUp;
+    private boolean reverse;
 
     public CurveLayout(Context context) {
         this(context, null, 0);
@@ -118,6 +120,7 @@ public class CurveLayout extends FrameLayout {
     }
 
     public void dismiss() {
+        reverse = true;
         animateSettle(dismissOffset, 0);
     }
 
@@ -184,10 +187,7 @@ public class CurveLayout extends FrameLayout {
         Log.e(TAG, "BottomSheet onTouchEvent: " + currentX);
         currentX = ev.getRawX();
         sheetDragHelper.processTouchEvent(ev);
-        if (sheetDragHelper.getCapturedView() != null) {
-            return true;
-        }
-        return super.onTouchEvent(ev);
+        return sheetDragHelper.getCapturedView() != null || super.onTouchEvent(ev);
     }
 
     @Override
@@ -370,18 +370,19 @@ public class CurveLayout extends FrameLayout {
         @Override
         public void onViewPositionChanged(View child, int left, int top, int dx, int dy) {
             // notify the offset helper that the sheets offsets have been changed externally
+            reverse = false;
             sheetOffsetHelper.resyncOffsets();
             dispatchPositionChangedCallback();
+            canUp = Math.abs(top - dismissOffset) > MIN_DRAG_DISTANCE;
         }
 
         @Override
         public void onViewReleased(View releasedChild, float velocityX, float velocityY) {
             // dismiss on downward fling, otherwise settle back to expanded position
-            final boolean dismiss = velocityY >= MIN_FLING_VELOCITY;
-            Log.e(TAG, "onViewReleased->dismiss:" + dismiss);
-            animateSettle(dismiss ? dismissOffset : 0, velocityY);
+            boolean expand = canUp || Math.abs(velocityY) > MIN_FLING_VELOCITY;
+            reverse = false;
+            animateSettle(expand ? 0 : dismissOffset, velocityY);
         }
-
     };
 
     private final OnLayoutChangeListener sheetLayout = new OnLayoutChangeListener() {
@@ -391,7 +392,7 @@ public class CurveLayout extends FrameLayout {
             sheetExpandedTop = top;
             sheetBottom = bottom;
             dismissOffset = (int) ((600));
-            currentTop = sheet.getTop();
+            int currentTop = sheet.getTop();
             sheetOffsetHelper.onViewLayout();
 
             // modal bottom sheet content should not initially be taller than the 16:9 keyline
@@ -430,11 +431,11 @@ public class CurveLayout extends FrameLayout {
     }
 
     private void dispatchPositionChangedCallback() {
-        int dy = sheet.getTop() - currentTop;
-        currentTop = sheet.getTop();
+//        int dy = sheet.getTop() - currentTop;
+//        currentTop = sheet.getTop();
         if (callbacks != null && !callbacks.isEmpty()) {
             for (Callbacks callback : callbacks) {
-                callback.onSheetPositionChanged(sheet.getTop(), currentX, dy, hasInteractedWithSheet);
+                callback.onSheetPositionChanged(sheet.getTop(), currentX, -1, reverse);
                 if (isExpanded()) {
                     callback.onSheetExpanded();
                 }
@@ -461,10 +462,10 @@ public class CurveLayout extends FrameLayout {
             dismissOffset = bundle.getInt(KEY_DISMISS_OFFSET);
             if (b) {
                 Log.e(TAG, "onRestoreInstanceState: 读取缓存，展开了！");
-                dismiss();
+//                dismiss();
             } else {
                 Log.e(TAG, "onRestoreInstanceState: 读取缓存，关闭了了！");
-                expand();
+//                expand();
             }
             return;
         }

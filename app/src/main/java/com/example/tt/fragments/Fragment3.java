@@ -29,7 +29,7 @@ import static com.example.tt.fragments.pagetransformer.MyListView.TAG;
  * Created by Joe on 2016-06-09
  * Email: lovejjfg@gmail.com
  */
-public class Fragment3 extends BaseFragment implements View.OnClickListener, TouchCircleView.OnLoadingListener {
+public class Fragment3 extends BaseFragment implements View.OnClickListener {
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -39,7 +39,6 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener, Tou
     private String[] names;
     private ArrayList<Fragment> fragments;
     private ViewPagerAdapter mAdapter;
-    private int currentTop;
 
     public Fragment3() {
     }
@@ -96,6 +95,7 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener, Tou
         // TODO: 2016/10/25解耦CurveLayout 和子Fragment 不然会有内存泄露的问题
         ListFragment.setCurveLayout(mBoottom);
         mBoottom.registerCallback(new CurveLayout.Callbacks() {
+            private float currentTop;
             private int dy;
 
             @Override
@@ -121,34 +121,27 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener, Tou
             }
 
             @Override
-            public void onSheetPositionChanged(int sheetTop, float currentX, int ddy, boolean userInteracted) {
-                Log.e(TAG, "onSheetPositionChanged:userInteracted " + userInteracted);
+            public void onSheetPositionChanged(int sheetTop, float currentX, int ddy, boolean reverse) {
                 if (mCurveViewHeight == 0) {
                     mCurveViewHeight = mCurveView.getHeight();
                 }
                 if (currentTop == 0) {
                     currentTop = sheetTop;
                 }
-                // TODO: 2016/10/25 回退的时候不走变化最好
                 this.dy += sheetTop - currentTop;
                 currentTop = sheetTop;
-                Log.e(TAG, "onSheetPositionChanged:dydydydy " + this.dy);
-                Log.e(TAG, "onSheetPositionChanged:dxdxdxdxdx " + currentX);
-
                 float fraction = 1 - sheetTop * 1.0f / mCurveViewHeight;
-                Log.e(TAG, "onSheetPositionChanged: fraction:" + fraction);
-                Log.e(TAG, "onSheetPositionChanged: setTranslationY:" + this.dy * 0.2f);
-                if (fraction >= 0 && !mBoottom.isExpanded()) {//向上拉
-                    mCurveView.setTranslationY(this.dy * 0.2f);
-                } else if (fraction < 0 && !mBoottom.isExpanded()) {//向下拉
-                    mCurveView.onDispatch(currentX, this.dy);
-                    mCurveView.setScaleX(1 - fraction * 0.5f);
-                    mCurveView.setScaleY(1 - fraction * 0.5f);
+                if (!reverse) {
+                    if (fraction >= 0 && !mBoottom.isExpanded()) {//向上拉
+                        mCurveView.setTranslationY(this.dy * 0.2f);
+                    } else if (fraction < 0 && !mBoottom.isExpanded()) {//向下拉
+                        mCurveView.onDispatch(currentX, this.dy);
+                        mCurveView.setScaleX(1 - fraction * 0.5f);
+                        mCurveView.setScaleY(1 - fraction * 0.5f);
+                    }
                 }
             }
         });
-
-//        setUpIndicatorWidth();
         return rootView;
     }
 
@@ -185,41 +178,4 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener, Tou
         mViewPager.setCurrentItem(mViewPager.getCurrentItem() == fragments.size() ? fragments.size() - 1 : mViewPager.getCurrentItem());
         mTab.setupWithViewPager(mViewPager);
     }
-
-    @Override
-    public void onProgressStateChange(int state, boolean hide) {
-
-    }
-
-    @Override
-    public void onProgressLoading() {
-
-    }
-
-    @Override
-    public void onGoBackHome() {
-        mBoottom.dismiss();
-    }
-
-//    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
-//    private void setUpIndicatorWidth()  {
-//        try {
-//            Class<?> tablayout = mTab.getClass();
-//            Field tabStrip = tablayout.getDeclaredField("mTabStrip");
-//            tabStrip.setAccessible(true);
-//            LinearLayout ll_tab= (LinearLayout) tabStrip.get(mTab);
-//            for (int i = 0; i < ll_tab.getChildCount(); i++) {
-//                View child = ll_tab.getChildAt(i);
-//                child.setPadding(0,0,0,0);
-//                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,1);
-//                child.setLayoutParams(params);
-//                child.invalidate();
-//            }
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        } catch (NoSuchFieldException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
 }
