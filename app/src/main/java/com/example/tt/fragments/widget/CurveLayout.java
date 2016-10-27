@@ -165,7 +165,7 @@ public class CurveLayout extends FrameLayout {
         Log.e(TAG, "BottomSheet onInterceptTouchEvent: " + currentX);
         if (isExpanded()) {
             Log.e(TAG, "已经展开了！！！: " + currentX);
-//            sheetDragHelper.cancel();
+            sheetDragHelper.cancel();
             return false;
         }
         Log.e(TAG, "已经展开了就不应该走到这里了！！！！: " + currentX);
@@ -453,6 +453,7 @@ public class CurveLayout extends FrameLayout {
             for (Callbacks callback : callbacks) {
                 callback.onSheetPositionChanged(sheet.getTop(), currentX, -1, reverse);
                 if (isExpanded()) {
+                    sheetDragHelper.cancel();
                     callback.onSheetExpanded();
                 }
             }

@@ -72,7 +72,7 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
 //    CurveLayout mContainer;
     @Bind(R.id.bottom_sheet)
     CurveLayout mBoottom;
-//    @Bind(R.id.bt)
+    //    @Bind(R.id.bt)
 //    TextView mBt;
     private int mCurveViewHeight;
 
@@ -131,6 +131,7 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
 
             @Override
             public void onSheetPositionChanged(int sheetTop, float currentX, int ddy, boolean reverse) {
+
                 if (mCurveViewHeight == 0) {
                     mCurveViewHeight = mCurveView.getHeight();
                 }
