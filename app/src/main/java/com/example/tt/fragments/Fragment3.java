@@ -148,7 +148,7 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
                         mTab.setVisibility(View.VISIBLE);
                         mCurveView.setTranslationY(this.dy * 0.2f);
                         Log.e(TAG, "onSheetPositionChanged: " + fraction);
-                        mTab.setTranslationY(-fraction * mCurveView.getHeight());
+                        mTab.setTranslationY(-fraction * (mCurveView.getHeight() + mTab.getHeight()));
 //                        if (layoutParams == null) {
 //                            layoutParams = (ViewGroup.MarginLayoutParams) mViewPager.getLayoutParams();
 //                        }

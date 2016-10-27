@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
         android:background="#ff0"
-        android:visibility="visible"
+        android:visibility="gone"
         app:tabMode="scrollable">
     </android.support.design.widget.TabLayout>
 
