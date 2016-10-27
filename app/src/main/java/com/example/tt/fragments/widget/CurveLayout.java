@@ -51,6 +51,7 @@ public class CurveLayout extends FrameLayout {
     private static final String KEY_DEFAULT = "key_default";
     private static final String KEY_EXPAND = "key_expand";
     private static final String KEY_DISMISS_OFFSET = "key_dismissoffset";
+    private static final String KEY_TOP = "key_top";
     // constants
     private static final int MIN_SETTLE_VELOCITY = 6000; // px/s
 
@@ -125,7 +126,7 @@ public class CurveLayout extends FrameLayout {
     }
 
     public void expand() {
-        animateSettle(0, 0);
+        animateSettle(150, 0);
     }
 
     public boolean isExpanded() {
@@ -164,9 +165,10 @@ public class CurveLayout extends FrameLayout {
         Log.e(TAG, "BottomSheet onInterceptTouchEvent: " + currentX);
         if (isExpanded()) {
             Log.e(TAG, "已经展开了！！！: " + currentX);
-            sheetDragHelper.cancel();
+//            sheetDragHelper.cancel();
             return false;
         }
+        Log.e(TAG, "已经展开了就不应该走到这里了！！！！: " + currentX);
         hasInteractedWithSheet = true;
         if (isNestedScrolling) return false;    /* prefer nested scrolling to dragging */
 
@@ -175,16 +177,28 @@ public class CurveLayout extends FrameLayout {
             sheetDragHelper.cancel();
             return false;
         }
+        Log.e(TAG, "已经展开了就不应该走到这里了！！！！: " + currentX);
         return isDraggableViewUnder((int) ev.getX(), (int) ev.getY())
                 && (sheetDragHelper.shouldInterceptTouchEvent(ev));
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        if (isExpanded()) {
-            return false;
+//        if (isExpanded()) {
+//            return false;
+//        }
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            Log.e(TAG, "BottomSheet onTouchEvent DOWN: " + currentX);
         }
-        Log.e(TAG, "BottomSheet onTouchEvent: " + currentX);
+        if (ev.getAction() == MotionEvent.ACTION_MOVE) {
+            Log.e(TAG, "BottomSheet onTouchEvent MOVE: " + currentX);
+        }
+        if (ev.getAction() == MotionEvent.ACTION_UP) {
+            Log.e(TAG, "BottomSheet onTouchEvent UP: " + currentX);
+        }
+        if (ev.getAction() == MotionEvent.ACTION_CANCEL) {
+            Log.e(TAG, "BottomSheet onTouchEvent CANCEL: " + currentX);
+        }
         currentX = ev.getRawX();
         sheetDragHelper.processTouchEvent(ev);
         return sheetDragHelper.getCapturedView() != null || super.onTouchEvent(ev);
@@ -381,7 +395,7 @@ public class CurveLayout extends FrameLayout {
             // dismiss on downward fling, otherwise settle back to expanded position
             boolean expand = canUp || Math.abs(velocityY) > MIN_FLING_VELOCITY;
             reverse = false;
-            animateSettle(expand ? 0 : dismissOffset, velocityY);
+            animateSettle(expand ? 150 : dismissOffset, velocityY);
         }
     };
 
@@ -389,7 +403,8 @@ public class CurveLayout extends FrameLayout {
         @Override
         public void onLayoutChange(View v, int left, int top, int right, int bottom,
                                    int oldLeft, int oldTop, int oldRight, int oldBottom) {
-            sheetExpandedTop = top;
+
+            sheetExpandedTop = top + 150;
             sheetBottom = bottom;
             dismissOffset = (int) ((600));
             int currentTop = sheet.getTop();
@@ -406,6 +421,7 @@ public class CurveLayout extends FrameLayout {
                    but in this case, animate to it */
                 applySheetInitialHeightOffset(true, oldTop - sheetExpandedTop);
             }
+            Log.e(TAG, "onLayoutChange: 布局变化了！！" + sheet.getTop());
         }
     };
 
@@ -450,6 +466,7 @@ public class CurveLayout extends FrameLayout {
         bundle.putParcelable(KEY_DEFAULT, super.onSaveInstanceState());
         bundle.putBoolean(KEY_EXPAND, isExpanded());
         bundle.putInt(KEY_DISMISS_OFFSET, dismissOffset);
+        bundle.putInt(KEY_TOP, sheet.getTop());
         return bundle;
     }
 

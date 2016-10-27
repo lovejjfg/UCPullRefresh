@@ -83,7 +83,7 @@ public class ListFragment extends BaseFragment implements  TouchCircleView.OnLoa
         }
         if (mCurveLayout.isExpanded() && !isRefrsh && isVisible) {
             isRefrsh = true;
-            Log.e(TAG, "onCreateView: 在创建的时候请求数据了！！");
+            Log.e(TAG, "onCreateView: 在创建的时候请求数据了！！" + mCurveLayout.isExpanded());
             mHeader.setRefresh(true);
             getData();
         }
