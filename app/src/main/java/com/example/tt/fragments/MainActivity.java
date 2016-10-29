@@ -1,12 +1,19 @@
 package com.example.tt.fragments;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.StateListDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -17,11 +24,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private FragmentManager manager;
     @Bind(R.id.tab1)
-    TextView tv1;
+    RadioButton tv1;
     @Bind(R.id.tab2)
-    TextView tv2;
+    RadioButton tv2;
     @Bind(R.id.tab3)
-    TextView tv3;
+    RadioButton tv3;
+    @Bind(R.id.rg_container)
+    RadioGroup radioGroup;
     //    @Bind(R.id.view_pager)
 //    ViewPager mViewPager;
     private Fragment f1;
@@ -34,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,16 +72,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             f3 = getSupportFragmentManager().findFragmentByTag(T3);
         }
 
+        int[][] states = new int[][]{
+                new int[]{-android.R.attr.state_checked}, // unchecked
+                new int[]{android.R.attr.state_checked}  // pressed
+        };
+
+        int[] colors = new int[]{
+                Color.RED,
+                Color.GREEN,
+        };
+        ColorStateList colorStateList = new ColorStateList(states, colors);
 //        }
         //加入回退栈
-        tv1.setOnClickListener(this);
-        tv2.setOnClickListener(this);
-        tv3.setOnClickListener(this);
+        tv1.setButtonDrawable(null);
+        tv1.setCompoundDrawablesRelativeWithIntrinsicBounds(null, setImageButtonState(), null, null);
+        tv1.setTextColor(colorStateList);
+        tv2.setButtonDrawable(null);
+        tv2.setCompoundDrawablesRelativeWithIntrinsicBounds(null, setImageButtonState(), null, null);
+        tv2.setTextColor(colorStateList);
+        tv3.setButtonDrawable(null);
+        tv3.setCompoundDrawablesRelativeWithIntrinsicBounds(null, setImageButtonState(), null, null);
+        tv3.setTextColor(colorStateList);
+//        tv1.setOnClickListener(this);
+//        tv2.setOnClickListener(this);
+//        tv3.setOnClickListener(this);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                onClick(checkedId);
+            }
+        });
+
+
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    private void onClick(int checkedId) {
+        switch (checkedId) {
             case R.id.tab1:
                 manager.beginTransaction()
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -100,6 +136,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .commit();
                 break;
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private StateListDrawable setImageButtonState() {
+        StateListDrawable states = new StateListDrawable();
+
+        states.addState(new int[]{-android.R.attr.state_checked}, getDrawable(android.R.drawable.ic_media_play));
+        states.addState(new int[]{android.R.attr.state_checked}, getDrawable(android.R.drawable.ic_delete));
+//        states.addState(new int[]{-android.R.attr.state_enabled}, getDrawable(android.R.drawable.ic_input_get));
+//        states.addState(new int[]{android.R.attr.stateNotNeeded}, getDrawable(android.R.drawable.ic_input_get));
+
+        return states;
+    }
+
+    @Override
+    public void onClick(View v) {
+        onClick(v.getId());
     }
 
     @Override

@@ -28,42 +28,44 @@
 
     </FrameLayout>
 
-    <LinearLayout
+    <RadioGroup
+        android:id="@+id/rg_container"
         android:clipChildren="false"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <RadioButton
             android:id="@+id/tab1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableTop="@mipmap/ic_launcher"
             android:gravity="center"
             android:text="1"
+            android:textColor="@color/check_color"
             />
 
-        <TextView
+        <RadioButton
             android:id="@+id/tab2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:drawableTop="@mipmap/ic_launcher"
+            android:layout_weight="1"
             android:gravity="center"
-            android:translationY="8dp"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
+            android:drawableTop="@drawable/check_selectot"
+            android:textColor="@color/check_color"
+            android:text="2"
+            android:checked="true"
             />
 
-        <TextView
+        <RadioButton
             android:id="@+id/tab3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableTop="@mipmap/ic_launcher"
             android:gravity="center"
+            android:textColor="@color/check_color"
             android:text="3"
             />
-    </LinearLayout>
+    </RadioGroup>
 
 </LinearLayout>
