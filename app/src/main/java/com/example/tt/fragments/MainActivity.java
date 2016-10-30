@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         int[] colors = new int[]{
                 Color.RED,
-                Color.GREEN,
+                Color.GREEN
         };
         ColorStateList colorStateList = new ColorStateList(states, colors);
 //        }
@@ -88,10 +88,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv1.setCompoundDrawablesRelativeWithIntrinsicBounds(null, setImageButtonState(), null, null);
         tv1.setTextColor(colorStateList);
         tv2.setButtonDrawable(null);
-        tv2.setCompoundDrawablesRelativeWithIntrinsicBounds(null, setImageButtonState(), null, null);
+        tv2.setCompoundDrawables(null, setImageButtonState(), null, null);
         tv2.setTextColor(colorStateList);
         tv3.setButtonDrawable(null);
-        tv3.setCompoundDrawablesRelativeWithIntrinsicBounds(null, setImageButtonState(), null, null);
+        tv3.setCompoundDrawables(null, setImageButtonState(), null, null);
         tv3.setTextColor(colorStateList);
 //        tv1.setOnClickListener(this);
 //        tv2.setOnClickListener(this);
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         states.addState(new int[]{android.R.attr.state_checked}, getDrawable(android.R.drawable.ic_delete));
 //        states.addState(new int[]{-android.R.attr.state_enabled}, getDrawable(android.R.drawable.ic_input_get));
 //        states.addState(new int[]{android.R.attr.stateNotNeeded}, getDrawable(android.R.drawable.ic_input_get));
-
+        states.setBounds(0, 0, states.getIntrinsicWidth(), states.getIntrinsicHeight());
         return states;
     }
 
