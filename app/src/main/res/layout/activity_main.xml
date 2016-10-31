@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:clipChildren="false"
     tools:context="com.example.tt.fragments.MainActivity">
 
     <FrameLayout
@@ -14,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:clipChildren="false"
         >
 
         <!--<android.support.v4.view.ViewPager-->
@@ -30,7 +28,6 @@
 
     <RadioGroup
         android:id="@+id/rg_container"
-        android:clipChildren="false"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -41,6 +38,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:checked="true"
             android:text="1"
             android:textColor="@color/check_color"
             />
@@ -53,8 +51,6 @@
             android:gravity="center"
             android:drawableTop="@drawable/check_selectot"
             android:textColor="@color/check_color"
-            android:text="2"
-            android:checked="true"
             />
 
         <RadioButton
@@ -64,7 +60,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/check_color"
-            android:text="3"
+            android:text=""
             />
     </RadioGroup>
 

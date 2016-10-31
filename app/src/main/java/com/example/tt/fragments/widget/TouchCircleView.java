@@ -451,6 +451,11 @@ public class TouchCircleView extends View {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         //动画的
         switch (currentState) {

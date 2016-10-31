@@ -141,7 +141,6 @@ public class CurveLayout extends FrameLayout {
             throw new UnsupportedOperationException("CurveLayout must only have 1 child view");
         }
         sheet = child;
-//        checkTarget(child);
         sheetOffsetHelper = new ViewOffsetHelper(sheet);
         sheet.addOnLayoutChangeListener(sheetLayout);
         // force the sheet contents to be gravity bottom. This ain't a top sheet.
@@ -149,15 +148,6 @@ public class CurveLayout extends FrameLayout {
         super.addView(child, index, params);
     }
 
-    private void checkTarget(View child) {
-        if (child instanceof RecyclerView) {
-            sheet = child;
-        } else if (child instanceof ViewGroup) {
-            for (int i = 0; i < ((ViewGroup) child).getChildCount(); i++) {
-                checkTarget(((ViewGroup) child).getChildAt(i));
-            }
-        }
-    }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -211,58 +201,6 @@ public class CurveLayout extends FrameLayout {
         }
     }
 
-    @Override
-    public boolean onStartNestedScroll(View child, View target, int nestedScrollAxes) {
-        if ((nestedScrollAxes & View.SCROLL_AXIS_VERTICAL) != 0) {
-            isNestedScrolling = true;
-            nestedScrollInitialTop = sheet.getTop();
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void onNestedScroll(View target, int dxConsumed, int dyConsumed,
-                               int dxUnconsumed, int dyUnconsumed) {
-        // if scrolling downward, use any unconsumed (i.e. not used by the scrolling child)
-        // to drag the sheet downward
-        if (dyUnconsumed < 0 && !isExpanded()) {
-            sheetOffsetHelper.offsetTopAndBottom(-dyUnconsumed);
-            dispatchPositionChangedCallback();
-        }
-    }
-
-    @Override
-    public void onNestedPreScroll(View target, int dx, int dy, int[] consumed) {
-        // if scrolling upward & the sheet has been dragged downward
-        // then drag back into place before allowing scrolls
-        if (dy > 0 && !isExpanded()) {
-            final int upwardDragRange = sheet.getTop() - sheetExpandedTop;
-            if (upwardDragRange > 0) {
-                final int consume = Math.min(upwardDragRange, dy);
-                sheetOffsetHelper.offsetTopAndBottom(-consume);
-                dispatchPositionChangedCallback();
-                consumed[1] = consume;
-            }
-        }
-    }
-
-    @Override
-    public void onStopNestedScroll(View child) {
-        isNestedScrolling = false;
-        if (!settling                                               /* fling might have occurred */
-                && sheet.getTop() != nestedScrollInitialTop) {      /* don't expand after a tap */
-            expand();
-        }
-    }
-
-    @Override
-    public boolean onNestedFling(View target, float velocityX, float velocityY, boolean consumed) {
-        if (velocityY > 0 && !isExpanded()) {
-            animateSettle(0, velocityY);
-        }
-        return false;
-    }
 
     @Override
     protected void onAttachedToWindow() {

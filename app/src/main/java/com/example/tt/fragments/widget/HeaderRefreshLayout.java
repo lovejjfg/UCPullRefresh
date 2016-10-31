@@ -27,7 +27,6 @@ import android.support.v4.view.NestedScrollingParent;
 import android.support.v4.view.NestedScrollingParentHelper;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -70,7 +69,7 @@ public class HeaderRefreshLayout extends FrameLayout implements NestedScrollingP
         header = new TouchCircleView(getContext());
         header.addLoadingListener(this);
         float density = context.getResources().getDisplayMetrics().density;
-        addView(header, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (density * 120)));
+        addView(header, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (density * 130)));
     }
 
     @Override
@@ -265,7 +264,7 @@ public class HeaderRefreshLayout extends FrameLayout implements NestedScrollingP
 
     @Override
     public void onProgressLoading() {
-        resetDrag((int) (header.getHeight() * 0.6f));
+        resetDrag((int) (header.getHeight() * 0.5f));
     }
 
     @Override
