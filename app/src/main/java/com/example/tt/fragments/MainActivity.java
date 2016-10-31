@@ -58,13 +58,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             f3 = new Fragment3();
             manager.beginTransaction()
                     .add(R.id.fragment_container, f1, T1)
+                    .hide(f1)
 //                .addToBackStack("TAG1")
                     .add(R.id.fragment_container, f2, T2)
 //                .addToBackStack("TAG2")
                     .hide(f2)
                     .add(R.id.fragment_container, f3, T3)
 //                .addToBackStack("TAG3")
-                    .hide(f3)
+//                    .hide(f3)
                     .commit();
         } else {
             f1 = getSupportFragmentManager().findFragmentByTag(T1);
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        }
         //加入回退栈
         tv1.setButtonDrawable(null);
-        tv1.setCompoundDrawablesRelativeWithIntrinsicBounds(null, setImageButtonState(), null, null);
+        tv1.setCompoundDrawables(null, setImageButtonState(), null, null);
         tv1.setTextColor(colorStateList);
         tv2.setButtonDrawable(null);
         tv2.setCompoundDrawables(null, setImageButtonState(), null, null);
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 onClick(checkedId);
             }
         });
+        tv3.setChecked(true);
 
 
     }
@@ -142,8 +144,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private StateListDrawable setImageButtonState() {
         StateListDrawable states = new StateListDrawable();
 
-        states.addState(new int[]{-android.R.attr.state_checked}, getDrawable(android.R.drawable.ic_media_play));
-        states.addState(new int[]{android.R.attr.state_checked}, getDrawable(android.R.drawable.ic_delete));
+        states.addState(new int[]{-android.R.attr.state_checked}, getResources().getDrawable(android.R.drawable.ic_media_play));
+        states.addState(new int[]{android.R.attr.state_checked}, getResources().getDrawable(android.R.drawable.ic_delete));
 //        states.addState(new int[]{-android.R.attr.state_enabled}, getDrawable(android.R.drawable.ic_input_get));
 //        states.addState(new int[]{android.R.attr.stateNotNeeded}, getDrawable(android.R.drawable.ic_input_get));
         states.setBounds(0, 0, states.getIntrinsicWidth(), states.getIntrinsicHeight());

@@ -4,8 +4,8 @@ android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
     defaultConfig {
-        applicationId "com.example.tt.fragments"
-        minSdkVersion 15
+        applicationId "com.lovejjfg.uc_pullrefresh"
+        minSdkVersion 21
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"

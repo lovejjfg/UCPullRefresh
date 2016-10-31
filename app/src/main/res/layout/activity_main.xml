@@ -27,6 +27,7 @@
     </FrameLayout>
 
     <RadioGroup
+        android:visibility="gone"
         android:id="@+id/rg_container"
         android:orientation="horizontal"
         android:layout_width="match_parent"
