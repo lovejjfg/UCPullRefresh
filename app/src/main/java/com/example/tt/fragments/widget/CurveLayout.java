@@ -76,6 +76,8 @@ public class CurveLayout extends FrameLayout {
     private float currentX;
     private boolean canUp;
     private boolean reverse;
+    private int tabOffset;
+    private int currentTop;
 
     public CurveLayout(Context context) {
         this(context, null, 0);
@@ -126,7 +128,7 @@ public class CurveLayout extends FrameLayout {
     }
 
     public void expand() {
-        animateSettle(150, 0);
+        animateSettle(0, 0);
     }
 
     public boolean isExpanded() {
@@ -333,7 +335,7 @@ public class CurveLayout extends FrameLayout {
             // dismiss on downward fling, otherwise settle back to expanded position
             boolean expand = canUp || Math.abs(velocityY) > MIN_FLING_VELOCITY;
             reverse = false;
-            animateSettle(expand ? 150 : dismissOffset, velocityY);
+            animateSettle(expand ? tabOffset : dismissOffset, velocityY);
         }
     };
 
@@ -342,10 +344,9 @@ public class CurveLayout extends FrameLayout {
         public void onLayoutChange(View v, int left, int top, int right, int bottom,
                                    int oldLeft, int oldTop, int oldRight, int oldBottom) {
 
-            sheetExpandedTop = top + 150;
+            sheetExpandedTop = top + tabOffset;
             sheetBottom = bottom;
-            dismissOffset = (int) ((600));
-            int currentTop = sheet.getTop();
+            currentTop = top;
             sheetOffsetHelper.onViewLayout();
 
             // modal bottom sheet content should not initially be taller than the 16:9 keyline
@@ -391,7 +392,9 @@ public class CurveLayout extends FrameLayout {
             for (Callbacks callback : callbacks) {
                 callback.onSheetPositionChanged(sheet.getTop(), currentX, -1, reverse);
                 if (isExpanded()) {
-                    sheetDragHelper.cancel();
+                    if (sheetDragHelper != null) {
+                        sheetDragHelper.cancel();
+                    }
                     callback.onSheetExpanded();
                 }
             }
@@ -418,14 +421,24 @@ public class CurveLayout extends FrameLayout {
             dismissOffset = bundle.getInt(KEY_DISMISS_OFFSET);
             if (b) {
                 Log.e(TAG, "onRestoreInstanceState: 读取缓存，展开了！");
-//                dismiss();
+                expand();
             } else {
                 Log.e(TAG, "onRestoreInstanceState: 读取缓存，关闭了了！");
-//                expand();
+                dismiss();
             }
             return;
         }
         super.onRestoreInstanceState(state);
     }
 
+    public void setDismissOffset(int dismissOffset) {
+        this.dismissOffset = dismissOffset;
+    }
+
+    public void setTabOffset(int tabOffset) {
+        if (this.tabOffset != tabOffset) {
+            this.tabOffset = tabOffset;
+            sheetExpandedTop = currentTop + tabOffset;
+        }
+    }
 }

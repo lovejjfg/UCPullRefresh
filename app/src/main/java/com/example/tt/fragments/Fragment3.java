@@ -68,12 +68,8 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
 
     @Bind(R.id.ts)
     CurveView mCurveView;
-    //    @Bind(R.id.curve_container)
-//    CurveLayout mContainer;
     @Bind(R.id.bottom_sheet)
     CurveLayout mBoottom;
-    //    @Bind(R.id.bt)
-//    TextView mBt;
     private int mCurveViewHeight;
 
 
@@ -97,7 +93,6 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
         mTab.setupWithViewPager(mViewPager);
         ListFragment.setCurveLayout(mBoottom);
         mBoottom.registerCallback(new CurveLayout.Callbacks() {
-            private ViewGroup.MarginLayoutParams layoutParams;
             private float currentTop;
             private int dy;
 
@@ -134,6 +129,7 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
 
                 if (mCurveViewHeight == 0) {
                     mCurveViewHeight = mCurveView.getHeight();
+                    mBoottom.setDismissOffset(mCurveViewHeight);
                 }
                 if (currentTop == 0) {
                     currentTop = sheetTop;
@@ -141,21 +137,13 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
                 this.dy += sheetTop - currentTop;
                 currentTop = sheetTop;
                 float fraction = 1 - sheetTop * 1.0f / mCurveViewHeight;
-//                if (Math.abs(fraction) >= 0) {
-
-//                }
                 if (!reverse) {
                     if (fraction >= 0 && !mBoottom.isExpanded()) {//向上拉
                         mTab.setVisibility(View.VISIBLE);
+                        mBoottom.setTabOffset(mTab.getHeight());
                         mCurveView.setTranslationY(this.dy * 0.2f);
                         Log.e(TAG, "onSheetPositionChanged: " + fraction);
                         mTab.setTranslationY(-fraction * (mCurveView.getHeight() + mTab.getHeight()));
-//                        if (layoutParams == null) {
-//                            layoutParams = (ViewGroup.MarginLayoutParams) mViewPager.getLayoutParams();
-//                        }
-//                        layoutParams.setMargins(0, (int) fraction * mTab.getHeight(), 0, 0);
-//                        mViewPager.setLayoutParams(layoutParams);
-//                        mTab.setTranslationY(this.dy * 1.5f);
                     } else if (fraction < 0 && !mBoottom.isExpanded()) {//向下拉
                         mTab.setVisibility(View.GONE);
                         mCurveView.onDispatch(currentX, this.dy);
@@ -170,10 +158,6 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
 
 
     }
-//    @OnClick(R.id.bt)
-//    void onBtClick() {
-//        Log.e(TAG, "onBtClick: 按钮点击了！");
-//    }
 
     @NonNull
     private ArrayList<Fragment> initFragment() {
