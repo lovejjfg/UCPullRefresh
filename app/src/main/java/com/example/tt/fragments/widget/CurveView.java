@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 
 import com.example.tt.fragments.R;
@@ -21,19 +22,16 @@ import butterknife.ButterKnife;
  * Created by Joe on 2016-06-16
  * Email: lovejjfg@gmail.com
  */
-public class CurveView extends View  {
+public class CurveView extends FrameLayout {
     private static final String TAG = "TEST";
     private Paint paint;
     private Path path;
     private float currentX;
     private float currentY;
-//    private View targetView;
     @BindColor(R.color.uc_blue)
     int UC_COLOR;
     @BindDimen(R.dimen.max_drag)
     int MAX_DRAG;
-//    private ViewOffsetHelper sheetOffsetHelper;
-//    private int targetHeight;
 
 
     public CurveView(Context context) {
@@ -92,24 +90,14 @@ public class CurveView extends View  {
         canvas.drawPath(path, paint);
     }
 
-//    public void setTarget(View mView) {
-//        targetView = mView;
-//        targetHeight = targetView.getHeight();
-//        Log.e(TAG, "setTarget: " + targetHeight);
-//        sheetOffsetHelper = new ViewOffsetHelper(targetView);
-//    }
 
 
     public void onDispatch(float dx, float dy) {
         currentY = dy > MAX_DRAG ? MAX_DRAG : dy;
         float ddy = dy - currentY;
         currentX = dx;
-        Log.e(TAG, "onDispatch: " + ddy);
-//        targetView.setTranslationY(currentY * 0.5f);
         if (dy > 0) {
             invalidate();
-        } else {
-//            sheetOffsetHelper.offsetTopAndBottom((int) ddy);
         }
 
     }
