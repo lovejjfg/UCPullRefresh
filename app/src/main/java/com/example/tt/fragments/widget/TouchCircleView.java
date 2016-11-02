@@ -96,7 +96,6 @@ public class TouchCircleView extends View {
     private CirclePoint p11;
 
     private float currentOffset;
-    private float density;
     private int defaultOffset;
     private final Runnable finishAction = new Runnable() {
         @Override
@@ -180,7 +179,7 @@ public class TouchCircleView extends View {
 
     public TouchCircleView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        density = context.getResources().getDisplayMetrics().density;
+        float density = context.getResources().getDisplayMetrics().density;
         defaultOffset = (int) (16 * density);
         firstRange = (int) (80f * density);
         secRange = (int) (114f * density);
@@ -491,7 +490,6 @@ public class TouchCircleView extends View {
                 drawError(canvas);
                 break;
             case STATE_DRAW_PATH:
-//                drawFirstPath(canvas);
                 mCurrentRadius = outCirRadius;
                 mCurrentRectf = outRectF;
                 mCurrentPaint = paint;
@@ -499,7 +497,6 @@ public class TouchCircleView extends View {
                 drawCirclePath(canvas, paths);
                 break;
             case STATE_TRANSLATE_PATH:
-//                drawFirstPath(canvas);
                 drawCirclePath(canvas);
                 break;
             case STATE_DRAW_OUT_PATH:
@@ -519,15 +516,6 @@ public class TouchCircleView extends View {
         }
     }
 
-    private void drawSecPath(Canvas canvas) {
-        path.reset();
-        path.moveTo((float) (secondRectf.centerX() + Math.cos(180 / Math.PI * 30) * (secondRectf.centerX() - secondRectf.left)), (float) (secondRectf.centerY() + Math.sin(180 / Math.PI * 30) * (secondRectf.centerY() - secondRectf.top)));
-        path.cubicTo(secondRectf.centerX() - 10 * density, secondRectf.centerY() - backpaths, secondRectf.centerX() + 10 * density, secondRectf.centerY() - backpaths, (float) (secondRectf.centerX() - Math.cos(180 / Math.PI * 30) * (secondRectf.centerX() - secondRectf.left)), (float) (secondRectf.centerY() + Math.sin(180 / Math.PI * 30) * (secondRectf.centerY() - secondRectf.top)));
-//                path.quadTo(secondRectf.centerX(), secondRectf.centerY() - backpaths, (float) (secondRectf.centerX() - Math.cos(180 / Math.PI * 30) * (secondRectf.centerX() - secondRectf.left)), (float) (secondRectf.centerY() + Math.sin(180 / Math.PI * 30) * (secondRectf.centerY() - secondRectf.top)));
-//        canvas.drawArc(secondRectf, 0, 360, true, secPaint);
-        canvas.drawPath(path, secPaint);
-//                drawArc(canvas);
-    }
 
 
     private void drawCirclePath(Canvas canvas) {
@@ -575,15 +563,6 @@ public class TouchCircleView extends View {
         canvas.drawPath(path, mCurrentPaint);
     }
 
-    private void drawFirstPath(Canvas canvas) {
-        path.reset();
-        path.moveTo((float) (outRectF.centerX() - Math.cos(180 / Math.PI * 30) * (outRectF.centerX() - outRectF.left)), (float) (outRectF.centerY() - Math.sin(180 / Math.PI * 30) * (outRectF.centerY() - outRectF.top)));
-//                path.quadTo(outRectF.centerX(), outRectF.centerY() + paths, (float) (outRectF.centerX() + Math.cos(180 / Math.PI * 30) * (outRectF.centerX() - outRectF.left)), (float) (outRectF.centerY() - Math.sin(180 / Math.PI * 30) * (outRectF.centerY() - outRectF.top)));
-        path.cubicTo(outRectF.centerX() + 10 * density, outRectF.centerY() + paths, outRectF.centerX() - 10 * density, outRectF.centerY() + paths, (float) (outRectF.centerX() + Math.cos(180 / Math.PI * 30) * (outRectF.centerX() - outRectF.left)), (float) (outRectF.centerY() - Math.sin(180 / Math.PI * 30) * (outRectF.centerY() - outRectF.top)));
-        canvas.drawArc(outRectF, 0, 360, true, paint);
-        canvas.drawPath(path, paint);
-        drawArc(canvas);
-    }
 
     private void drawArc(Canvas canvas) {
         float startAngle = mCurrentGlobalAngle - mCurrentGlobalAngleOffset + START_ANGLE;
@@ -662,24 +641,10 @@ public class TouchCircleView extends View {
         mCurrentPaint = paint;
         resetPoints();
         drawCirclePath(canvas);
-//        canvas.drawArc(outRectF, 0, 360, false, paint);
         canvas.drawPath(mError, mHookPaint);
     }
 
 
-//    @SuppressWarnings("unused")
-//    private static int gradient(int color1, int color2, float p) {
-//        int r1 = (color1 & 0xff0000) >> 16;
-//        int g1 = (color1 & 0xff00) >> 8;
-//        int b1 = color1 & 0xff;
-//        int r2 = (color2 & 0xff0000) >> 16;
-//        int g2 = (color2 & 0xff00) >> 8;
-//        int b2 = color2 & 0xff;
-//        int newr = (int) (r2 * p + r1 * (1 - p));
-//        int newg = (int) (g2 * p + g1 * (1 - p));
-//        int newb = (int) (b2 * p + b1 * (1 - p));
-//        return Color.argb(ALPHA_FULL, newr, newg, newb);
-//    }
 
     private void start() {
         if (mRunning) {
