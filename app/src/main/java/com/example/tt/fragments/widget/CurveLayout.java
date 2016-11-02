@@ -51,6 +51,7 @@ public class CurveLayout extends FrameLayout {
     private static final String KEY_DEFAULT = "key_default";
     private static final String KEY_EXPAND = "key_expand";
     private static final String KEY_DISMISS_OFFSET = "key_dismissoffset";
+    private static final String KEY_TOP_OFFSET = "key_topoffset";
     private static final String KEY_TOP = "key_top";
     // constants
     private static final int MIN_SETTLE_VELOCITY = 6000; // px/s
@@ -70,7 +71,6 @@ public class CurveLayout extends FrameLayout {
     private int dismissOffset;
     private int nestedScrollInitialTop;
     private boolean settling = false;
-    private boolean isNestedScrolling = false;
     private boolean initialHeightChecked = false;
     private boolean hasInteractedWithSheet = false;
     private float currentX;
@@ -78,6 +78,8 @@ public class CurveLayout extends FrameLayout {
     private boolean reverse;
     private int tabOffset;
     private int currentTop;
+    private int currentTop2;
+    private boolean isExpand;
 
     public CurveLayout(Context context) {
         this(context, null, 0);
@@ -91,6 +93,14 @@ public class CurveLayout extends FrameLayout {
         super(context, attrs, defStyle);
         final ViewConfiguration viewConfiguration = ViewConfiguration.get(context);
         MIN_FLING_VELOCITY = viewConfiguration.getScaledMinimumFlingVelocity();
+    }
+
+    private void init() {
+        if (isExpand) {
+            expand();
+        } else {
+            dismiss();
+        }
     }
 
     /**
@@ -128,7 +138,7 @@ public class CurveLayout extends FrameLayout {
     }
 
     public void expand() {
-        animateSettle(0, 0);
+        animateSettle(sheetExpandedTop, 0);
     }
 
     public boolean isExpanded() {
@@ -156,41 +166,22 @@ public class CurveLayout extends FrameLayout {
         currentX = ev.getRawX();
         Log.e(TAG, "BottomSheet onInterceptTouchEvent: " + currentX);
         if (isExpanded()) {
-            Log.e(TAG, "已经展开了！！！: " + currentX);
             sheetDragHelper.cancel();
             return false;
         }
-        Log.e(TAG, "已经展开了就不应该走到这里了！！！！: " + currentX);
         hasInteractedWithSheet = true;
-        if (isNestedScrolling) return false;    /* prefer nested scrolling to dragging */
 
         final int action = MotionEventCompat.getActionMasked(ev);
         if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
             sheetDragHelper.cancel();
             return false;
         }
-        Log.e(TAG, "已经展开了就不应该走到这里了！！！！: " + currentX);
         return isDraggableViewUnder((int) ev.getX(), (int) ev.getY())
                 && (sheetDragHelper.shouldInterceptTouchEvent(ev));
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-//        if (isExpanded()) {
-//            return false;
-//        }
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            Log.e(TAG, "BottomSheet onTouchEvent DOWN: " + currentX);
-        }
-        if (ev.getAction() == MotionEvent.ACTION_MOVE) {
-            Log.e(TAG, "BottomSheet onTouchEvent MOVE: " + currentX);
-        }
-        if (ev.getAction() == MotionEvent.ACTION_UP) {
-            Log.e(TAG, "BottomSheet onTouchEvent UP: " + currentX);
-        }
-        if (ev.getAction() == MotionEvent.ACTION_CANCEL) {
-            Log.e(TAG, "BottomSheet onTouchEvent CANCEL: " + currentX);
-        }
         currentX = ev.getRawX();
         sheetDragHelper.processTouchEvent(ev);
         return sheetDragHelper.getCapturedView() != null || super.onTouchEvent(ev);
@@ -360,6 +351,7 @@ public class CurveLayout extends FrameLayout {
                    but in this case, animate to it */
                 applySheetInitialHeightOffset(true, oldTop - sheetExpandedTop);
             }
+//            init();
             Log.e(TAG, "onLayoutChange: 布局变化了！！" + sheet.getTop());
         }
     };
@@ -377,7 +369,6 @@ public class CurveLayout extends FrameLayout {
     }
 
     private void dispatchDismissCallback() {
-        isNestedScrolling = false;
         if (callbacks != null && !callbacks.isEmpty()) {
             for (Callbacks callback : callbacks) {
                 callback.onSheetNarrowed();
@@ -386,11 +377,14 @@ public class CurveLayout extends FrameLayout {
     }
 
     private void dispatchPositionChangedCallback() {
-//        int dy = sheet.getTop() - currentTop;
-//        currentTop = sheet.getTop();
+        if (currentTop2 == 0) {
+            currentTop2 = sheet.getTop();
+        }
+        int dy = sheet.getTop() - currentTop2;
+        currentTop2= sheet.getTop();
         if (callbacks != null && !callbacks.isEmpty()) {
             for (Callbacks callback : callbacks) {
-                callback.onSheetPositionChanged(sheet.getTop(), currentX, -1, reverse);
+                callback.onSheetPositionChanged(sheet.getTop(), currentX, dy, reverse);
                 if (isExpanded()) {
                     if (sheetDragHelper != null) {
                         sheetDragHelper.cancel();
@@ -408,7 +402,7 @@ public class CurveLayout extends FrameLayout {
         bundle.putParcelable(KEY_DEFAULT, super.onSaveInstanceState());
         bundle.putBoolean(KEY_EXPAND, isExpanded());
         bundle.putInt(KEY_DISMISS_OFFSET, dismissOffset);
-        bundle.putInt(KEY_TOP, sheet.getTop());
+        bundle.putInt(KEY_TOP, sheetExpandedTop);
         return bundle;
     }
 
@@ -417,15 +411,10 @@ public class CurveLayout extends FrameLayout {
         if (state instanceof Bundle) {
             Bundle bundle = (Bundle) state;
             super.onRestoreInstanceState(bundle.getParcelable(KEY_DEFAULT));
-            boolean b = bundle.getBoolean(KEY_EXPAND);
+            isExpand = bundle.getBoolean(KEY_EXPAND);
             dismissOffset = bundle.getInt(KEY_DISMISS_OFFSET);
-            if (b) {
-                Log.e(TAG, "onRestoreInstanceState: 读取缓存，展开了！");
-                expand();
-            } else {
-                Log.e(TAG, "onRestoreInstanceState: 读取缓存，关闭了了！");
-                dismiss();
-            }
+            sheetExpandedTop = bundle.getInt(KEY_TOP);
+            Log.e(TAG, "onRestoreInstanceState: 保存了top::"+sheetExpandedTop);
             return;
         }
         super.onRestoreInstanceState(state);

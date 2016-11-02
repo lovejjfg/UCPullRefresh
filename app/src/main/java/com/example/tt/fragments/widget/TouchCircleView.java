@@ -13,6 +13,7 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.graphics.ColorUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Property;
@@ -385,7 +386,7 @@ public class TouchCircleView extends View {
             return;
         }
         if (STATE_DRAW_CIRCLE == currentState) {
-            updateState(STATE_DRAW_BACK, false);
+            updateState(STATE_DRAW_BACK, true);
         }
         stop();
         updateState(STATE_DRAW_IDLE, true);
@@ -666,19 +667,19 @@ public class TouchCircleView extends View {
     }
 
 
-    @SuppressWarnings("unused")
-    private static int gradient(int color1, int color2, float p) {
-        int r1 = (color1 & 0xff0000) >> 16;
-        int g1 = (color1 & 0xff00) >> 8;
-        int b1 = color1 & 0xff;
-        int r2 = (color2 & 0xff0000) >> 16;
-        int g2 = (color2 & 0xff00) >> 8;
-        int b2 = color2 & 0xff;
-        int newr = (int) (r2 * p + r1 * (1 - p));
-        int newg = (int) (g2 * p + g1 * (1 - p));
-        int newb = (int) (b2 * p + b1 * (1 - p));
-        return Color.argb(ALPHA_FULL, newr, newg, newb);
-    }
+//    @SuppressWarnings("unused")
+//    private static int gradient(int color1, int color2, float p) {
+//        int r1 = (color1 & 0xff0000) >> 16;
+//        int g1 = (color1 & 0xff00) >> 8;
+//        int b1 = color1 & 0xff;
+//        int r2 = (color2 & 0xff0000) >> 16;
+//        int g2 = (color2 & 0xff00) >> 8;
+//        int b2 = color2 & 0xff;
+//        int newr = (int) (r2 * p + r1 * (1 - p));
+//        int newg = (int) (g2 * p + g1 * (1 - p));
+//        int newb = (int) (b2 * p + b1 * (1 - p));
+//        return Color.argb(ALPHA_FULL, newr, newg, newb);
+//    }
 
     private void start() {
         if (mRunning) {
@@ -835,10 +836,10 @@ public class TouchCircleView extends View {
                 updateState(STATE_TRANSLATE_PATH, false);
                 tranlateFraction = animation.getAnimatedFraction();
                 if (!isBack) {
-                    mixPaint.setColor(gradient(Color.RED, Color.GREEN, tranlateFraction));
+                    mixPaint.setColor(ColorUtils.blendARGB(Color.RED, Color.GREEN, tranlateFraction));
                     mCurrentRadius = (int) (outCirRadius + tranlateFraction * (secondRadius - outCirRadius));
                 } else {
-                    mixPaint.setColor(gradient(Color.GREEN, Color.RED, tranlateFraction));
+                    mixPaint.setColor(ColorUtils.blendARGB(Color.GREEN, Color.RED, tranlateFraction));
                     mCurrentRadius = (int) (secondRadius - tranlateFraction * (secondRadius - outCirRadius));
                 }
                 mCurrentPaint = mixPaint;

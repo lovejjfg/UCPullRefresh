@@ -131,22 +131,17 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
                     mCurveViewHeight = mCurveView.getHeight();
                     mBoottom.setDismissOffset(mCurveViewHeight);
                 }
-                if (currentTop == 0) {
-                    currentTop = sheetTop;
-                }
-                this.dy += sheetTop - currentTop;
-                currentTop = sheetTop;
+                this.dy += ddy;
                 float fraction = 1 - sheetTop * 1.0f / mCurveViewHeight;
                 if (!reverse) {
                     if (fraction >= 0 && !mBoottom.isExpanded()) {//向上拉
                         mTab.setVisibility(View.VISIBLE);
                         mBoottom.setTabOffset(mTab.getHeight());
-                        mCurveView.setTranslationY(this.dy * 0.2f);
-                        Log.e(TAG, "onSheetPositionChanged: " + fraction);
+                        mCurveView.setTranslationY(dy * 0.2f);
                         mTab.setTranslationY(-fraction * (mCurveView.getHeight() + mTab.getHeight()));
                     } else if (fraction < 0 && !mBoottom.isExpanded()) {//向下拉
                         mTab.setVisibility(View.GONE);
-                        mCurveView.onDispatch(currentX, this.dy);
+                        mCurveView.onDispatch(currentX, dy);
                         mCurveView.setScaleX(1 - fraction * 0.5f);
                         mCurveView.setScaleY(1 - fraction * 0.5f);
                     }
