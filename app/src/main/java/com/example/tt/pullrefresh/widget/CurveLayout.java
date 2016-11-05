@@ -64,7 +64,7 @@ public class CurveLayout extends FrameLayout {
     private ViewOffsetHelper sheetOffsetHelper;
 
     // state
-    private List<Callbacks> callbacks;
+    private static List<Callbacks> callbacks;
     private int sheetExpandedTop;
     private int sheetBottom;
     private int dismissOffset;
