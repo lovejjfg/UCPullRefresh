@@ -59,7 +59,7 @@ public class CurveLayout extends FrameLayout {
     private final int MIN_DRAG_DISTANCE = 200;
 
     // child views & helpers
-    private View sheet;
+    private View sheet;//target
     private ViewDragHelper sheetDragHelper;
     private ViewOffsetHelper sheetOffsetHelper;
 
@@ -75,7 +75,7 @@ public class CurveLayout extends FrameLayout {
     private float currentX;
     private boolean canUp;
     private boolean reverse;
-    private int tabOffset;
+    private int expandTopOffset ;
     private int currentTop;
     private int currentTop2;
     private boolean isExpand;
@@ -137,6 +137,7 @@ public class CurveLayout extends FrameLayout {
     }
 
     public void expand() {
+        reverse = true;
         animateSettle(sheetExpandedTop, 0);
     }
 
@@ -325,7 +326,7 @@ public class CurveLayout extends FrameLayout {
             // dismiss on downward fling, otherwise settle back to expanded position
             boolean expand = canUp || Math.abs(velocityY) > MIN_FLING_VELOCITY;
             reverse = false;
-            animateSettle(expand ? tabOffset : dismissOffset, velocityY);
+            animateSettle(expand ? sheetExpandedTop : dismissOffset, velocityY);
         }
     };
 
@@ -334,7 +335,7 @@ public class CurveLayout extends FrameLayout {
         public void onLayoutChange(View v, int left, int top, int right, int bottom,
                                    int oldLeft, int oldTop, int oldRight, int oldBottom) {
 
-            sheetExpandedTop = top + tabOffset;
+            sheetExpandedTop = top + expandTopOffset;
             sheetBottom = bottom;
             currentTop = top;
             sheetOffsetHelper.onViewLayout();
@@ -350,7 +351,6 @@ public class CurveLayout extends FrameLayout {
                    but in this case, animate to it */
                 applySheetInitialHeightOffset(true, oldTop - sheetExpandedTop);
             }
-//            init();
             Log.e(TAG, "onLayoutChange: 布局变化了！！" + sheet.getTop());
         }
     };
@@ -420,13 +420,13 @@ public class CurveLayout extends FrameLayout {
     }
 
     public void setDismissOffset(int dismissOffset) {
-        this.dismissOffset = dismissOffset;
+        this.dismissOffset = currentTop + dismissOffset;
     }
 
-    public void setTabOffset(int tabOffset) {
-        if (this.tabOffset != tabOffset) {
-            this.tabOffset = tabOffset;
-            sheetExpandedTop = currentTop + tabOffset;
+    public void setExpandTopOffset(int tabOffset) {
+        if (this.expandTopOffset != tabOffset) {
+            this.expandTopOffset  = tabOffset;
+            sheetExpandedTop = currentTop + expandTopOffset;
         }
     }
 }

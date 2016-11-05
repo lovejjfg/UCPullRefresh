@@ -52,9 +52,9 @@ public class ViewOffsetHelper {
 
     private final View mView;
 
-    private int mLayoutTop;
+    private int mLayoutTop;//top
     private int mLayoutLeft;
-    private int mOffsetTop;
+    private int mOffsetTop;//top移动的绝对值
     private int mOffsetLeft;
 
     public ViewOffsetHelper(View view) {

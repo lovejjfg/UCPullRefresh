@@ -124,7 +124,7 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
                 if (!reverse) {
                     if (fraction >= 0 && !mBoottom.isExpanded()) {//向上拉
                         mTab.setVisibility(View.VISIBLE);
-                        mBoottom.setTabOffset(mTab.getHeight());
+                        mBoottom.setExpandTopOffset(mTab.getHeight());
                         mCurveView.setTranslationY(dy * 0.2f);
                         mTab.setTranslationY(-fraction * (mCurveView.getHeight() + mTab.getHeight()));
                     } else if (fraction < 0 && !mBoottom.isExpanded()) {//向下拉

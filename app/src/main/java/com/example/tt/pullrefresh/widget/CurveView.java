@@ -90,12 +90,10 @@ public class CurveView extends FrameLayout {
 
     public void onDispatch(float dx, float dy) {
         currentY = dy > MAX_DRAG ? MAX_DRAG : dy;
-        float ddy = dy - currentY;
         currentX = dx;
         if (dy > 0) {
             invalidate();
         }
-
     }
 
 
