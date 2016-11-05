@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.example.tt.fragments"
+<manifest package="com.example.tt.pullrefresh"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
-        android:name=".base.APP"
+        android:name="com.example.tt.pullrefresh.base.APP"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.tt.pullrefresh.MainActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

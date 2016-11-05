@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.tt.fragments.utils;
+package com.example.tt.pullrefresh.utils;
 
 import android.support.v4.view.ViewCompat;
 import android.util.Property;

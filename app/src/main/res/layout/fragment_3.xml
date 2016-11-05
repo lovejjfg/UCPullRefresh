@@ -10,7 +10,7 @@
     android:clipToPadding="false"
     android:orientation="vertical">
 
-    <!--<com.example.tt.fragments.widget.CurveLayout-->
+    <!--<pullrefreshsh.widget.CurveLayout-->
     <!--android:id="@+id/curve_container"-->
     <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
     <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
@@ -23,7 +23,7 @@
     <!--android:orientation="vertical"-->
     <!--&gt;-->
 
-    <com.example.tt.fragments.widget.CurveView
+    <com.example.tt.pullrefresh.widget.CurveView
         android:id="@+id/ts"
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -48,7 +48,7 @@
         app:tabMode="scrollable">
     </android.support.design.widget.TabLayout>
 
-    <com.example.tt.fragments.widget.CurveLayout
+    <com.example.tt.pullrefresh.widget.CurveLayout
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,14 +62,14 @@
             android:orientation="vertical">
 
 
-            <com.example.tt.fragments.widget.ScrollAbleViewPager
+            <com.example.tt.pullrefresh.widget.ScrollAbleViewPager
                 android:id="@+id/view_pager"
                 android:background="#fff"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 >
-            </com.example.tt.fragments.widget.ScrollAbleViewPager>
+            </com.example.tt.pullrefresh.widget.ScrollAbleViewPager>
 
 
             <LinearLayout
@@ -100,8 +100,8 @@
             </LinearLayout>
 
         </FrameLayout>
-    </com.example.tt.fragments.widget.CurveLayout>
-    <!--</com.example.tt.fragments.widget.CurveLayout>-->
+    </com.example.tt.pullrefresh.widget.CurveLayout>
+    <!--</pullrefreshsh.widget.CurveLayout>-->
 </FrameLayout>
 
 

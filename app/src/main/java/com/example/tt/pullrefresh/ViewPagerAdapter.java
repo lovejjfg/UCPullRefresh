@@ -1,4 +1,4 @@
-package com.example.tt.fragments;
+package com.example.tt.pullrefresh;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -36,7 +36,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         int i = position % 2;
         return  ListFragment.newInstance(i == 0 ? Constants.TYPE_NORMAL : Constants.TYPE_BIG_IMG);
-//        return fragments.get(position);
+//        return pullrefresh.get(position);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
      * 改变tag。
      */
     public void notifyChangeInPosition(int n) {
-        // shift the ID returned by getItemId outside the range of all previous fragments
+        // shift the ID returned by getItemId outside the range of all previous pullrefresh
         baseId += getCount() + n;
     }
 

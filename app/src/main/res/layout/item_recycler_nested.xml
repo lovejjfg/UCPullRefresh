@@ -78,12 +78,12 @@
             android:textSize="14sp"/>
 
 
-        <com.example.tt.fragments.pagetransformer.MyListView
+        <com.example.tt.pullrefresh.pagetransformer.MyListView
             android:id="@+id/list_view"
             android:visibility="gone"
             android:layout_width="100dp"
             android:layout_height="match_parent">
-        </com.example.tt.fragments.pagetransformer.MyListView>
+        </com.example.tt.pullrefresh.pagetransformer.MyListView>
 
     </RelativeLayout>
 

@@ -1,18 +1,14 @@
-package com.example.tt.fragments.widget;
+package com.example.tt.pullrefresh.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 
-import com.example.tt.fragments.R;
-import com.example.tt.fragments.utils.ViewOffsetHelper;
+import com.example.tt.pullrefresh.R;
 
 import butterknife.BindColor;
 import butterknife.BindDimen;

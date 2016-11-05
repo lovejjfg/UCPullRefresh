@@ -1,4 +1,4 @@
-package com.example.tt.fragments.widget;
+package com.example.tt.pullrefresh.widget;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -19,12 +19,10 @@ import android.util.Log;
 import android.util.Property;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
-import android.view.animation.OvershootInterpolator;
 
-import com.example.tt.fragments.R;
+import com.example.tt.pullrefresh.R;
 
 import java.util.ArrayList;
 

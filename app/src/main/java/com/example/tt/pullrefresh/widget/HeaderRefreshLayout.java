@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package com.example.tt.fragments.widget;
+package com.example.tt.pullrefresh.widget;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.NestedScrollingChild;

@@ -1,4 +1,4 @@
-package com.example.tt.fragments;
+package com.example.tt.pullrefresh;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -6,16 +6,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.tt.fragments.base.BaseFragment;
-import com.example.tt.fragments.widget.CurveLayout;
-import com.example.tt.fragments.widget.CurveView;
-import com.example.tt.fragments.widget.ScrollAbleViewPager;
+import com.example.tt.pullrefresh.base.BaseFragment;
+import com.example.tt.pullrefresh.widget.CurveLayout;
+import com.example.tt.pullrefresh.widget.CurveView;
+import com.example.tt.pullrefresh.widget.ScrollAbleViewPager;
 
 import java.util.ArrayList;
 

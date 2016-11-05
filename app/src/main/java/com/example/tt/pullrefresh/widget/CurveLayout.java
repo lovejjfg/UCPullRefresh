@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.tt.fragments.widget;
+package com.example.tt.pullrefresh.widget;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -27,7 +27,6 @@ import android.os.Parcelable;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,8 +36,8 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.example.tt.fragments.utils.AnimUtils;
-import com.example.tt.fragments.utils.ViewOffsetHelper;
+import com.example.tt.pullrefresh.utils.AnimUtils;
+import com.example.tt.pullrefresh.utils.ViewOffsetHelper;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

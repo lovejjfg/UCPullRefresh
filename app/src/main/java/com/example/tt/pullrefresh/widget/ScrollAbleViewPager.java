@@ -1,4 +1,4 @@
-package com.example.tt.fragments.widget;
+package com.example.tt.pullrefresh.widget;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

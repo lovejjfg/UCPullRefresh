@@ -1,10 +1,8 @@
-package com.example.tt.fragments;
+package com.example.tt.pullrefresh;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,13 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.tt.fragments.adapter.ListAdapter;
-import com.example.tt.fragments.base.BaseFragment;
-import com.example.tt.fragments.model.ModelBean;
-import com.example.tt.fragments.widget.CurveLayout;
-import com.example.tt.fragments.widget.HeaderRefreshLayout;
-import com.example.tt.fragments.widget.TouchCircleView;
-import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
+import com.example.tt.pullrefresh.adapter.ListAdapter;
+import com.example.tt.pullrefresh.base.BaseFragment;
+import com.example.tt.pullrefresh.model.ModelBean;
+import com.example.tt.pullrefresh.widget.CurveLayout;
+import com.example.tt.pullrefresh.widget.HeaderRefreshLayout;
+import com.example.tt.pullrefresh.widget.TouchCircleView;
 
 import java.util.ArrayList;
 

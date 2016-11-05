@@ -1,27 +1,27 @@
-package com.example.tt.fragments.holder;
+package com.example.tt.pullrefresh.holder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.tt.fragments.R;
-import com.example.tt.fragments.model.ModelBean;
+import com.example.tt.pullrefresh.R;
+import com.example.tt.pullrefresh.model.ModelBean;
 
 
 /**
- * Created by Joe on 2016/10/10.
+ * Created by Joe on 2016/10/8.
  * Email lovejjfg@gmail.com
  */
 
-public class ListBigImgHolder extends RecyclerView.ViewHolder {
+public class ListNormalHolder extends RecyclerView.ViewHolder {
 
     private final TextView mTittle;
     private final TextView mContent;
     private final TextView mDate;
     private final ImageView mImg;
 
-    public ListBigImgHolder(View itemView) {
+    public ListNormalHolder(View itemView) {
         super(itemView);
         mTittle = (TextView) itemView.findViewById(R.id.tv_tittle);
         mContent = (TextView) itemView.findViewById(R.id.tv_content);

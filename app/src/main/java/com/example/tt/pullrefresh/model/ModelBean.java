@@ -1,4 +1,4 @@
-package com.example.tt.fragments.model;
+package com.example.tt.pullrefresh.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

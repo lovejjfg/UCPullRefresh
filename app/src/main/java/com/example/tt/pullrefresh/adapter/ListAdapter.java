@@ -1,19 +1,19 @@
-package com.example.tt.fragments.adapter;
+package com.example.tt.pullrefresh.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.tt.fragments.holder.ListNormalHolder;
-import com.example.tt.fragments.model.ModelBean;
-import com.example.tt.fragments.OnItemClickListener;
-import com.example.tt.fragments.R;
-import com.example.tt.fragments.holder.ListBigImgHolder;
+import com.example.tt.pullrefresh.holder.ListNormalHolder;
+import com.example.tt.pullrefresh.model.ModelBean;
+import com.example.tt.pullrefresh.OnItemClickListener;
+import com.example.tt.pullrefresh.R;
+import com.example.tt.pullrefresh.holder.ListBigImgHolder;
 import com.lovejjfg.powerrecycle.RefreshRecycleAdapter;
 
-import static com.example.tt.fragments.Constants.TYPE_BIG_IMG;
-import static com.example.tt.fragments.Constants.TYPE_NORMAL;
+import static com.example.tt.pullrefresh.Constants.TYPE_BIG_IMG;
+import static com.example.tt.pullrefresh.Constants.TYPE_NORMAL;
 
 
 /**

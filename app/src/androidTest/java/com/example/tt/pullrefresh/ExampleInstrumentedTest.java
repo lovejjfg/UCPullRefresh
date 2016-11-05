@@ -1,4 +1,4 @@
-package com.example.tt.fragments;
+package com.example.tt.pullrefresh;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.tt.fragments", appContext.getPackageName());
+        assertEquals("com.example.tt.pullrefresh", appContext.getPackageName());
     }
 }

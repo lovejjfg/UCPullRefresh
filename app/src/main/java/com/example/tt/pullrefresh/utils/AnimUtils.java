@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.tt.fragments.utils;
+package com.example.tt.pullrefresh.utils;
 
 import android.animation.Animator;
 import android.animation.TimeInterpolator;
