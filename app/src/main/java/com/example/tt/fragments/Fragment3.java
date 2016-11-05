@@ -9,26 +9,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.example.tt.fragments.base.BaseFragment;
 import com.example.tt.fragments.widget.CurveLayout;
 import com.example.tt.fragments.widget.CurveView;
 import com.example.tt.fragments.widget.ScrollAbleViewPager;
-import com.example.tt.fragments.widget.TouchCircleView;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-import static android.R.attr.fraction;
-import static com.example.tt.fragments.pagetransformer.MyListView.TAG;
 
 /**
  * Created by Joe on 2016-06-09
@@ -40,8 +33,7 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private ViewPager.PageTransformer pageTransformer;
-    private String[] names;
+    private static final String TAG = "TAG";
     private ArrayList<Fragment> fragments;
     private ViewPagerAdapter mAdapter;
 
@@ -83,8 +75,6 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
         rootView.findViewById(R.id.tv_clear).setOnClickListener(this);
         ButterKnife.bind(this, rootView);
 
-        mViewPager.setPageTransformer(false, pageTransformer);
-        names = getResources().getStringArray(R.array.names);
         fragments = initFragment();
         mAdapter = new ViewPagerAdapter(getChildFragmentManager(), fragments);
         mViewPager.setAdapter(mAdapter);
@@ -93,7 +83,6 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
         mTab.setupWithViewPager(mViewPager);
         ListFragment.setCurveLayout(mBoottom);
         mBoottom.registerCallback(new CurveLayout.Callbacks() {
-            private float currentTop;
             private int dy;
 
             @Override
