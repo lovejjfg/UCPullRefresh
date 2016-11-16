@@ -217,7 +217,7 @@ public class SwipItemLayout extends FrameLayout {
 
         @Override
         public int clampViewPositionVertical(View child, int top, int dy) {
-            return 0;
+            return top;
         }
 
         @Override
