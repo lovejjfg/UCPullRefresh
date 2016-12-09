@@ -1,0 +1,32 @@
+language: android
+jdk: oraclejdk8
+sudo: false
+
+android:
+  components:
+    - tools
+    - build-tools-23.0.2
+    - android-23
+    - extra-android-m2repository
+    - extra-android-support
+  licenses:
+    - 'android-sdk-preview-license-52d11cd2'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
+
+before_install:
+ - chmod +x gradlew
+
+script:
+  - ./gradlew build
+# 部署之前
+#before_deploy:
+  # - mv app/build/outputs/apk/app-release.apk
+
+#deploy:
+#  provider: releases
+#  api_key: "eb2658cafd3f0c8c60a321fd0c33d52d69b999ec"
+#  file: "app/build/outputs/apk/app-release.apk"
+#  skip_cleanup: true
+#  on:
+#    tags: false
