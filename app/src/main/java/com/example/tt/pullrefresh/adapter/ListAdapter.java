@@ -49,12 +49,11 @@ public class ListAdapter extends RefreshRecycleAdapter<ModelBean> {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onItemClick(v, null, position);
+                    listener.onItemClick(v, position);
                 }
             }
         });
         ModelBean modelBean = list.get(position);
-        modelBean.setTittle("这是" + position);
         switch (currentType) {
             case TYPE_NORMAL:
                 ((ListNormalHolder) holder).onBind(modelBean);
@@ -67,9 +66,6 @@ public class ListAdapter extends RefreshRecycleAdapter<ModelBean> {
 
     }
 
-    public void setListener(OnItemClickListener listener) {
-        this.listener = listener;
-    }
 
     private OnItemClickListener listener;
 }

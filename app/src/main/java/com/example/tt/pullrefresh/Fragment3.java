@@ -75,7 +75,8 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
         ButterKnife.bind(this, rootView);
 
         fragments = initFragment();
-        mAdapter = new ViewPagerAdapter(getChildFragmentManager(), fragments);
+        String[] names = getResources().getStringArray(R.array.items);
+        mAdapter = new ViewPagerAdapter(getChildFragmentManager(), fragments,names);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setOffscreenPageLimit(fragments.size());
         mViewPager.setScrollable(mBoottom.isExpanded());
@@ -145,14 +146,14 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
     @NonNull
     private ArrayList<Fragment> initFragment() {
         ArrayList<Fragment> fragments = new ArrayList<>(8);
-        fragments.add(ListFragment.newInstance(Constants.TYPE_NORMAL));
-        fragments.add(ListFragment.newInstance(Constants.TYPE_BIG_IMG));
-        fragments.add(ListFragment.newInstance(Constants.TYPE_NORMAL));
-        fragments.add(ListFragment.newInstance(Constants.TYPE_BIG_IMG));
-        fragments.add(ListFragment.newInstance(Constants.TYPE_NORMAL));
-        fragments.add(ListFragment.newInstance(Constants.TYPE_BIG_IMG));
-        fragments.add(ListFragment.newInstance(Constants.TYPE_NORMAL));
-        fragments.add(ListFragment.newInstance(Constants.TYPE_BIG_IMG));
+        fragments.add(ListFragment.newInstance(Constants.TYPE_NORMAL,0));
+        fragments.add(ListFragment.newInstance(Constants.TYPE_BIG_IMG,1));
+        fragments.add(ListFragment.newInstance(Constants.TYPE_NORMAL,2));
+        fragments.add(ListFragment.newInstance(Constants.TYPE_BIG_IMG,3));
+        fragments.add(ListFragment.newInstance(Constants.TYPE_NORMAL,4));
+        fragments.add(ListFragment.newInstance(Constants.TYPE_BIG_IMG,5));
+        fragments.add(ListFragment.newInstance(Constants.TYPE_NORMAL,6));
+        fragments.add(ListFragment.newInstance(Constants.TYPE_BIG_IMG,7));
         return fragments;
     }
 
@@ -162,17 +163,19 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
         Log.e(TAG, "onClick: " + i);
         if (i == R.id.tv_clear) {
             fragments.clear();
+//            mAdapter.removeAllSavedState();
         } else if (i == R.id.tv_add) {
-            ListFragment fragment1 = ListFragment.newInstance(Constants.TYPE_NORMAL);
-            fragment1.setUpdate(true);
-            fragments.add(0, fragment1);
+            ListFragment fragment1 = ListFragment.newInstance(Constants.TYPE_NORMAL, fragments.size());
+            fragments.add(fragments.size(),fragment1);
         } else if (i == R.id.tv_delete) {
-            ListFragment remove = (ListFragment) fragments.remove(0);
-            remove.setUpdate(true);
+            int currentItem = mViewPager.getCurrentItem();
+            ListFragment remove = (ListFragment) fragments.remove(currentItem);
+//            mAdapter.removeSavedState(currentItem);
         }
         mAdapter.setFragments(fragments);
         mViewPager.setOffscreenPageLimit(fragments.size());
         mViewPager.setCurrentItem(mViewPager.getCurrentItem() == fragments.size() ? fragments.size() - 1 : mViewPager.getCurrentItem());
+
         mTab.setupWithViewPager(mViewPager);
     }
 }

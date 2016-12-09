@@ -4,13 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
+import com.lovejjfg.powerrecycle.model.ISelect;
 
 /**
  * Created by Joe on 2016/10/14.
  * Email lovejjfg@gmail.com
  */
 
-public class ModelBean implements Parcelable {
+public class ModelBean implements Parcelable, ISelect {
     @SerializedName("sTittle")
     private String tittle;
     @SerializedName("sContent")
@@ -19,6 +20,13 @@ public class ModelBean implements Parcelable {
     private String imgUrl;
 
     private String jumpUrl;
+
+    public ModelBean(boolean isChecked) {
+        this.isChecked = isChecked;
+    }
+
+    private boolean isChecked;
+
 
     public String getContent() {
         return content;
@@ -99,5 +107,15 @@ public class ModelBean implements Parcelable {
                 ", imgUrl='" + imgUrl + '\'' +
                 ", jumpUrl='" + jumpUrl + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean isSelected() {
+        return isChecked;
+    }
+
+    @Override
+    public void setSelected(boolean selected) {
+        isChecked = selected;
     }
 }

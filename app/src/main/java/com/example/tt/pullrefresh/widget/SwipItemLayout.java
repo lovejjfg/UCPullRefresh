@@ -16,14 +16,8 @@
 
 package com.example.tt.pullrefresh.widget;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
-import android.animation.ValueAnimator;
 import android.content.Context;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
@@ -37,13 +31,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.example.tt.pullrefresh.utils.AnimUtils;
-import com.example.tt.pullrefresh.utils.ViewOffsetHelper;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static android.R.attr.startX;
-import static android.R.attr.startY;
 
 
 /**
@@ -184,28 +175,6 @@ public class SwipItemLayout extends FrameLayout {
     }
 
 
-
-    /**
-     * Provides the appropriate interpolator for the settle animation depending upon:
-     * – If dismissing then exit at full speed i.e. linearly otherwise decelerate
-     * – If have initial velocity then respect it (i.e. start linearly) otherwise accelerate into
-     * the animation.
-     */
-    private TimeInterpolator getSettleInterpolator(boolean dismissing, float initialVelocity) {
-        if (initialVelocity != 0) {
-            if (dismissing) {
-                return AnimUtils.getLinearInterpolator();
-            } else {
-                return AnimUtils.getLinearOutSlowInInterpolator(getContext());
-            }
-        } else {
-            if (dismissing) {
-                return AnimUtils.getFastOutLinearInInterpolator(getContext());
-            } else {
-                return AnimUtils.getFastOutSlowInInterpolator(getContext());
-            }
-        }
-    }
 
 
     private final ViewDragHelper.Callback dragHelperCallbacks = new ViewDragHelper.Callback() {

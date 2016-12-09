@@ -1,6 +1,5 @@
 package com.example.tt.pullrefresh;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.tt.pullrefresh.adapter.ListAdapter;
@@ -18,15 +16,18 @@ import com.example.tt.pullrefresh.model.ModelBean;
 import com.example.tt.pullrefresh.widget.CurveLayout;
 import com.example.tt.pullrefresh.widget.HeaderRefreshLayout;
 import com.example.tt.pullrefresh.widget.TouchCircleView;
+import com.lovejjfg.powerrecycle.AdapterLoader;
 
 import java.util.ArrayList;
+
+import static android.R.attr.id;
 
 
 /**
  * Created by Joe on 2016/10/8.
  * Email lovejjfg@gmail.com
  */
-public class ListFragment extends BaseFragment implements  TouchCircleView.OnLoadingListener {
+public class ListFragment extends BaseFragment implements TouchCircleView.OnLoadingListener {
     private static final String TAG = ListFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private ArrayList<ModelBean> list;
@@ -36,17 +37,20 @@ public class ListFragment extends BaseFragment implements  TouchCircleView.OnLoa
     private boolean isVisible;
     private boolean isUpdate;
     public static final String CURRENT_TYPE = "CURRENT_TYPE";
+    public static final String CURRENT_ID = "CURRENT_ID";
     private HeaderRefreshLayout mHeader;
     private static CurveLayout mCurveLayout;
+    private String[] stringArray;
 
     public ListFragment() {
 
     }
 
-    public static ListFragment newInstance(int type) {
+    public static ListFragment newInstance(int type,int id) {
         ListFragment fragment = new ListFragment();
         Bundle args = new Bundle();
         args.putInt(CURRENT_TYPE, type);
+        args.putInt(CURRENT_ID, id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,6 +59,7 @@ public class ListFragment extends BaseFragment implements  TouchCircleView.OnLoa
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        stringArray = getResources().getStringArray(R.array.items);
         Log.e(TAG, "onCreate: fragment创建了 ！！");
     }
 
@@ -68,7 +73,7 @@ public class ListFragment extends BaseFragment implements  TouchCircleView.OnLoa
         mHeader = (HeaderRefreshLayout) inflate.findViewById(R.id.header_container);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(manager);
-        adapter = new ListAdapter(currentType);
+        adapter = new ListAdapter(getArguments().getInt(CURRENT_TYPE));
         mRecyclerView.setAdapter(adapter);
         mHeader.addLoadingListener(this);
         if (savedInstanceState != null) {
@@ -85,10 +90,9 @@ public class ListFragment extends BaseFragment implements  TouchCircleView.OnLoa
             getData();
         }
         adapter.setTotalCount(50);
-        adapter.setListener(new OnItemClickListener() {
-            @SuppressLint("DefaultLocale")
+        adapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
             @Override
-            public void onItemClick(View itemView, ImageView image, int id) {
+            public void onItemClick(View itemView, int position) {
                 toast.setText(String.format("这是第%d个", id));
                 toast.show();
             }
@@ -114,10 +118,9 @@ public class ListFragment extends BaseFragment implements  TouchCircleView.OnLoa
             list = new ArrayList<>();
         }
         for (int i = 0; i < 15; i++) {
-            list.add(new ModelBean());
+            list.add(new ModelBean(stringArray[getArguments().getInt(CURRENT_ID)]));
         }
     }
-
 
 
     @Override
@@ -128,7 +131,7 @@ public class ListFragment extends BaseFragment implements  TouchCircleView.OnLoa
             Log.e(TAG, "setUserVisibleHint: 不可见了！！");
         }
         isVisible = isVisibleToUser;
-        if (mCurveLayout.isExpanded()&&!isRefrsh && isVisible && mRecyclerView != null) {
+        if (mCurveLayout.isExpanded() && !isRefrsh && isVisible && mRecyclerView != null) {
             isRefrsh = true;
             Log.e(TAG, "onCreateView: 在创建的时候请求数据了！！");
             mHeader.setRefresh(true);

@@ -19,23 +19,24 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     private int position;
     private long baseId = 0;
     private final FragmentManager manager;
+    private final String[] names;
 
-    public ViewPagerAdapter(FragmentManager fm, @Nullable ArrayList<Fragment> fragments) {
+    public ViewPagerAdapter(FragmentManager fm, @Nullable ArrayList<Fragment> fragments, String[] names) {
         super(fm);
         manager = fm;
         this.fragments = fragments;
+        this.names = names;
     }
 
     public void setFragments(@Nullable ArrayList<Fragment> fragments) {
         this.fragments = fragments;
-        notifyChangeInPosition(1);
         notifyDataSetChanged();
     }
 
     @Override
     public Fragment getItem(int position) {
-        int i = position % 2;
-        return  ListFragment.newInstance(i == 0 ? Constants.TYPE_NORMAL : Constants.TYPE_BIG_IMG);
+//        int i = position % 2;
+        return fragments.get(position);
 //        return pullrefresh.get(position);
     }
 
@@ -46,8 +47,9 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        this.position = position;
-        return "这是" + position;
+        Fragment fragment = fragments.get(position);
+        int anInt = fragment.getArguments().getInt(ListFragment.CURRENT_ID, 0);
+        return names[anInt];
     }
     //每次在instantiateItem中调用这个的时候，都会是不同的id。适配器发现找不到之前的碎片，
     //就会重新调用getItem来新建碎片。
@@ -58,14 +60,14 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 //        return baseId + position;
 //    }
 
-    /**
-     * 删除之后，在调用notifyDataSetChanged之前，先调用这个notifyChangeInPosition(1)。
-     * 改变tag。
-     */
-    public void notifyChangeInPosition(int n) {
-        // shift the ID returned by getItemId outside the range of all previous pullrefresh
-        baseId += getCount() + n;
-    }
+//    /**
+//     * 删除之后，在调用notifyDataSetChanged之前，先调用这个notifyChangeInPosition(1)。
+//     * 改变tag。
+//     */
+//    public void notifyChangeInPosition(int n) {
+//        // shift the ID returned by getItemId outside the range of all previous pullrefresh
+//        baseId += getCount() + n;
+//    }
 
     @Override
     public int getItemPosition(Object object) {
