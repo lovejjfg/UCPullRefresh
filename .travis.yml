@@ -1,6 +1,10 @@
 language: android
 jdk: oraclejdk8
 sudo: false
+branches:
+  only:
+  - master
+  - dev
 
 android:
   components:
