@@ -5,12 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.tt.pullrefresh.holder.ListNormalHolder;
-import com.example.tt.pullrefresh.model.ModelBean;
-import com.example.tt.pullrefresh.OnItemClickListener;
 import com.example.tt.pullrefresh.R;
 import com.example.tt.pullrefresh.holder.ListBigImgHolder;
-import com.lovejjfg.powerrecycle.RefreshRecycleAdapter;
+import com.example.tt.pullrefresh.holder.ListNormalHolder;
+import com.example.tt.pullrefresh.model.ModelBean;
+import com.lovejjfg.powerrecycle.PowerAdapter;
 
 import static com.example.tt.pullrefresh.Constants.TYPE_BIG_IMG;
 import static com.example.tt.pullrefresh.Constants.TYPE_NORMAL;
@@ -21,7 +20,7 @@ import static com.example.tt.pullrefresh.Constants.TYPE_NORMAL;
  * Email lovejjfg@gmail.com
  */
 
-public class ListAdapter extends RefreshRecycleAdapter<ModelBean> {
+public class ListAdapter extends PowerAdapter<ModelBean> {
     private int currentType;
 
     public ListAdapter(int currentType) {

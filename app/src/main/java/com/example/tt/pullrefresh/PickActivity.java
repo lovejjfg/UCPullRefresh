@@ -1,8 +1,8 @@
 package com.example.tt.pullrefresh;
 
 import android.graphics.Canvas;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,16 +15,13 @@ import android.widget.CheckedTextView;
 
 import com.example.tt.pullrefresh.model.ModelBean;
 import com.lovejjfg.powerrecycle.AdapterLoader;
-import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
+import com.lovejjfg.powerrecycle.PowerAdapter;
 import com.lovejjfg.powerrecycle.TouchHelperCallback;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-import static com.lovejjfg.powerrecycle.AdapterLoader.MultipleMode;
-import static com.lovejjfg.powerrecycle.AdapterLoader.SingleMode;
 
 public class PickActivity extends AppCompatActivity {
 
@@ -86,7 +83,7 @@ public class PickActivity extends AppCompatActivity {
 
     }
 
-    static class PickAdapter extends SelectRefreshRecycleAdapter<ModelBean> {
+    static class PickAdapter extends PowerAdapter<ModelBean> {
 
         @Override
         public RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType) {
@@ -99,16 +96,12 @@ public class PickActivity extends AppCompatActivity {
                 ((PickHolder) holder).onBind((PickHolder) holder, list.get(position));
             }
         }
-
-        public void removeItem(int position) {
-            list.remove(position);
-            notifyItemRemoved(position);
-        }
     }
 
     static class PickHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.text)
         CheckedTextView mText;
+
         public PickHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -127,7 +120,6 @@ public class PickActivity extends AppCompatActivity {
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
     }
-
 
 
 }
