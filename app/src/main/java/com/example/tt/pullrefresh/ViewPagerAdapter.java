@@ -19,7 +19,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     private int position;
     private long baseId = 0;
     private final FragmentManager manager;
-    private final String[] names;
+    private  String[] names;
 
     public ViewPagerAdapter(FragmentManager fm, @Nullable ArrayList<Fragment> fragments, String[] names) {
         super(fm);
@@ -76,5 +76,9 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             return POSITION_NONE;
         }
         return i;
+    }
+
+    public void updateItems(String[] itemses) {
+        this.names = itemses;
     }
 }

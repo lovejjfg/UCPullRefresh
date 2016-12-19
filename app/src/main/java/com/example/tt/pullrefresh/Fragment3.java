@@ -1,5 +1,7 @@
 package com.example.tt.pullrefresh;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,7 +17,10 @@ import com.example.tt.pullrefresh.base.BaseFragment;
 import com.example.tt.pullrefresh.widget.CurveLayout;
 import com.example.tt.pullrefresh.widget.CurveView;
 import com.example.tt.pullrefresh.widget.ScrollAbleViewPager;
+import com.google.gson.Gson;
 
+import java.io.InputStream;
+import java.io.Writer;
 import java.util.ArrayList;
 
 import butterknife.Bind;
@@ -171,11 +176,24 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
             int currentItem = mViewPager.getCurrentItem();
             ListFragment remove = (ListFragment) fragments.remove(currentItem);
 //            mAdapter.removeSavedState(currentItem);
+        } else {
+            startActivityForResult(new Intent(getContext(), PickActivity.class), 200);
+            return;
         }
         mAdapter.setFragments(fragments);
         mViewPager.setOffscreenPageLimit(fragments.size());
         mViewPager.setCurrentItem(mViewPager.getCurrentItem() == fragments.size() ? fragments.size() - 1 : mViewPager.getCurrentItem());
 
         mTab.setupWithViewPager(mViewPager);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e(TAG, "onActivityResult: " + requestCode);
+        if (resultCode == Activity.RESULT_OK) {
+            String[] itemses = data.getStringArrayExtra("items");
+            mAdapter.updateItems(itemses);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
