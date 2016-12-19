@@ -2,6 +2,7 @@ package com.example.tt.pullrefresh;
 
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -52,15 +53,16 @@ public class PickActivity extends AppCompatActivity {
         final PickAdapter pickedAdapter = new PickAdapter();
         PickAdapter unpickedAdapter = new PickAdapter();
         mPickRecyclerView.setAdapter(pickedAdapter);
+        mPickRecyclerView.bringToFront();
 //        pickedAdapter.setSelectedMode(MultipleMode);
         //初始化一个TouchHelperCallback
-        TouchHelperCallback callback = new MyTouchHelperCallback();
+        TouchHelperCallback callback = new TouchHelperCallback();
         //添加一个回调
-        callback.setItemDragSwipeCallBack(unpickedAdapter);
+        callback.setItemDragSwipeCallBack(pickedAdapter);
         //初始化一个ItemTouchHelper
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         //关联相关的RecycleView
-        itemTouchHelper.attachToRecyclerView(mUnpickRecyclerView);
+        itemTouchHelper.attachToRecyclerView(mPickRecyclerView);
         mPickRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         pickedAdapter.setList(pickedBeans);
         mUnpickRecyclerView.setAdapter(unpickedAdapter);
@@ -95,6 +97,12 @@ public class PickActivity extends AppCompatActivity {
             if (holder instanceof PickHolder) {
                 ((PickHolder) holder).onBind((PickHolder) holder, list.get(position));
             }
+        }
+
+        @NonNull
+        @Override
+        public int[] getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+            return new int[]{ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.ACTION_STATE_IDLE};
         }
     }
 
