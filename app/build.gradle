@@ -11,7 +11,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.lovejjfg.uc_pullrefresh"
+        applicationId "com.lovejjfg.pullrefresh"
         minSdkVersion 21
         targetSdkVersion 24
         versionCode 1
@@ -23,6 +23,11 @@ android {
     }
     buildTypes {
         release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            applicationIdSuffix ".debugg"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

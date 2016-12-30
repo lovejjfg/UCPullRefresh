@@ -11,14 +11,18 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask">
-
         </activity>
         <activity android:name=".PickActivity">
         </activity>
 
+        <activity
+            android:name=".NewsListActivity"
+            android:label="@string/title_activity_news_list">
+        </activity>
+
         <activity-alias
             android:name="LaunchActivity"
-            android:targetActivity=".MainActivity">
+            android:targetActivity=".NewsListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

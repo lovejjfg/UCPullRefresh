@@ -1,59 +1,53 @@
-<?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:ignore="RtlHardcoded"
     >
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
-        android:clipChildren="false"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:elevation="0dp"
+        >
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/coll"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            app:expandedTitleMarginEnd="50dp"
-            app:expandedTitleMarginStart="50dp"
-            app:layout_scrollFlags="scroll|snap">
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+            >
 
             <com.example.tt.pullrefresh.widget.CurveView
-                android:id="@+id/ts"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_gravity="bottom"
                 android:background="@drawable/uc"
-                android:visibility="visible"
+                android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.9"
                 />
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/main.toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:layout_scrollFlags="scroll|enterAlways|snap"
-                />
+                app:theme="@style/ThemeOverlay.AppCompat.Dark"
+                >
+            </android.support.v7.widget.Toolbar>
 
 
         </android.support.design.widget.CollapsingToolbarLayout>
-
-
     </android.support.design.widget.AppBarLayout>
 
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.example.tt.pullrefresh.NewsListActivity">
+        android:scrollbars="none"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView
             android:layout_width="wrap_content"
@@ -63,34 +57,18 @@
 
     </android.support.v4.widget.NestedScrollView>
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tab"
+
+    <TableLayout
+        android:id="@+id/tv_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ff0"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:tabMode="scrollable">
-    </android.support.design.widget.TabLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:src="@android:drawable/ic_menu_share"
-        app:layout_anchor="@id/appbar"
-        app:layout_anchorGravity="bottom|right"
-        />
-
-    <TextView
-        android:text="xxxxxxxxxx"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorAccent"
         android:gravity="center"
-        android:background="#0f0"
-        android:layout_width="match_parent"
+        android:text="xxxxxx"
+        android:textColor="#fff"
+        android:textSize="18sp"
+        android:visibility="visible"
         app:layout_behavior="com.example.tt.pullrefresh.CustomerBehavior"
-        android:layout_height="?attr/actionBarSize"/>
-
-
-
-
+        >
+    </TableLayout>
 </android.support.design.widget.CoordinatorLayout>
-
