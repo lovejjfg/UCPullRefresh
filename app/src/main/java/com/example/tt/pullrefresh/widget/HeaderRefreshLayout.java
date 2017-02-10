@@ -30,6 +30,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.FrameLayout;
 
 
@@ -127,7 +128,7 @@ public class HeaderRefreshLayout extends FrameLayout implements NestedScrollingP
     @Override
     public boolean onNestedPreFling(View target, float velocityX,
                                     float velocityY) {
-        return dispatchNestedPreFling(velocityX, velocityY);
+        return mNestedScrollingChildHelper.dispatchNestedPreFling(velocityX, velocityY);
     }
 
 
@@ -162,34 +163,43 @@ public class HeaderRefreshLayout extends FrameLayout implements NestedScrollingP
         }
     }
 
+    private final int[] mParentOffsetInWindow = new int[2];
 
     @Override
     public void onNestedScroll(View target, int dxConsumed, int dyConsumed,
                                int dxUnconsumed, int dyUnconsumed) {
-        if (Math.abs(dyUnconsumed) > 150) {
-            return;
-        }
-        if (!header.ismRunning() && dyUnconsumed < 0) {
-            Log.e(TAG, "onNestedScroll:未消费：： " + dyUnconsumed);
-            updateOffset(dyUnconsumed);
+
+        dispatchNestedScroll(dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed,
+                mParentOffsetInWindow);
+        Log.e(TAG, "onNestedScroll:未消费：： " + dyUnconsumed);
+        Log.e(TAG, "onNestedScroll:消费的 的：： " + dyConsumed);
+        //避免头布局一下就消失的情况
+//        if (Math.abs(dyUnconsumed) > 150) {
+//            return;
+//        }
+        final int dy = dyUnconsumed + mParentOffsetInWindow[1];
+        if (!canChildScrollUp() && !header.ismRunning() && dyUnconsumed < 0) {
+            updateOffset(dy);
         }
 
     }
 
     @Override
     public boolean onNestedFling(View target, float velocityX, float velocityY, boolean consumed) {
-        if (!header.ismRunning() && !consumed) {
-            float v = velocityY * 0.3f;
-            updateOffset((int) (v));
-            return true;
-        }
-        return false;
+        Log.e(TAG, "onNestedFling:：： " + velocityY);
+        Log.e(TAG, "onNestedFling:：： 是否消费：" + consumed);
+//        if (!header.ismRunning() && !consumed) {
+//            float v = velocityY * 0.3f;
+//            updateOffset((int) (v));
+//            return true;
+//        }
+        return true;
     }
 
 
     private void updateOffset(int dyUnconsumed) {
 
-        totalDrag -= dyUnconsumed * 0.5;
+        totalDrag -= dyUnconsumed * 0.6f;
         Log.e(TAG, "updateOffset: " + totalDrag);
         if (totalDrag < 0) {
             totalDrag = 0;
@@ -306,7 +316,7 @@ public class HeaderRefreshLayout extends FrameLayout implements NestedScrollingP
         }
     }
 
-
+    //刷新的时候子View是否可以滑动，默认可以
     public boolean isScrollble() {
         return scrollble;
     }
@@ -322,5 +332,26 @@ public class HeaderRefreshLayout extends FrameLayout implements NestedScrollingP
 
     public boolean removeLoadingListener(@NonNull TouchCircleView.OnLoadingListener listener) {
         return header.removeLoadingListener(listener);
+    }
+
+    public boolean canChildScrollUp() {
+//        if (mChildScrollUpCallback != null) {
+//            return mChildScrollUpCallback.canChildScrollUp(this, mTarget);
+//        }
+        if (targetView == null) {
+            throw new RuntimeException("Should init targetView at first!");
+        }
+        if (android.os.Build.VERSION.SDK_INT < 14) {
+            if (targetView instanceof AbsListView) {
+                final AbsListView absListView = (AbsListView) targetView;
+                return absListView.getChildCount() > 0
+                        && (absListView.getFirstVisiblePosition() > 0 || absListView.getChildAt(0)
+                        .getTop() < absListView.getPaddingTop());
+            } else {
+                return ViewCompat.canScrollVertically(targetView, -1) || targetView.getScrollY() > 0;
+            }
+        } else {
+            return ViewCompat.canScrollVertically(targetView, -1);
+        }
     }
 }
