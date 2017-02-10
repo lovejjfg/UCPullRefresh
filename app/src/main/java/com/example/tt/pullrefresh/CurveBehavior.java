@@ -32,18 +32,18 @@ public class CurveBehavior extends CoordinatorLayout.Behavior<CurveView> {
     public boolean onDependentViewChanged(CoordinatorLayout parent, CurveView child, View dependency) {
         Log.e("TAG1", "onDependentViewChanged:dependency:: " + dependency.getY() + "height:" + dependency.getHeight());
         Log.e("TAG1", "onDependentViewChanged: child::" + child.toString());
-        int height = child.getHeight();
-        float v = dependency.getY() / (dependency.getHeight() - height);
-        if (v < -1.0) {
-            return false;
-        }
-        Log.e("TAG1", "onDependentViewChanged: 比列::" + v);
-        if (v == 0) {
-            child.setY(-height);
-        } else {
-            float y = -height - v * height;
-            child.setY(y > 0 ? 0 : y);
-        }
+//        int height = child.getHeight();
+//        float v = dependency.getY() / (dependency.getHeight() - height);
+//        if (v < -1.0) {
+//            return false;
+//        }
+//        Log.e("TAG1", "onDependentViewChanged: 比列::" + v);
+//        if (v == 0) {
+//            child.setY(-height);
+//        } else {
+//            float y = -height - v * height;
+//            child.setY(y > 0 ? 0 : y);
+//        }
         return true;
     }
 
