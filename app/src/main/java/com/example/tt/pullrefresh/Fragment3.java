@@ -86,6 +86,12 @@ public class Fragment3 extends BaseFragment implements View.OnClickListener {
         mViewPager.setOffscreenPageLimit(fragments.size());
         mViewPager.setScrollable(mBoottom.isExpanded());
         mTab.setupWithViewPager(mViewPager);
+        mTab.post(new Runnable() {
+            @Override
+            public void run() {
+                mBoottom.setExpandTopOffset(mTab.getHeight());
+            }
+        });
         ListFragment.setCurveLayout(mBoottom);
         mBoottom.registerCallback(new CurveLayout.Callbacks() {
             private int dy;
